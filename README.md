@@ -38,4 +38,4 @@
 
 ## Что под капотом?
 
-**Windows** | **MacOS**
+**[Windows](https://github.com/taganovv/ban_words_filter/blob/main/Windows/README.md)** | **[MacOS](https://github.com/taganovv/ban_words_filter/blob/main/MacOS/README.md)**
