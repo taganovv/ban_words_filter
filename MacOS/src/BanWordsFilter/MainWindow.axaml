@@ -1,0 +1,152 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:BanWordsFilter.ViewModels"
+        xmlns:conv="using:BanWordsFilter.Converters"
+        x:Class="BanWordsFilter.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Title="Ban Words Filter"
+        Width="980"
+        Height="760"
+        MinWidth="820"
+        MinHeight="640"
+        WindowStartupLocation="CenterScreen">
+
+  <Window.Resources>
+    <conv:IntEqualsConverter x:Key="IntEquals" />
+    <conv:BoolToBrushConverter x:Key="BoolToBrush" />
+    <conv:BoolToPasswordCharConverter x:Key="BoolToPasswordChar" />
+  </Window.Resources>
+
+  <Grid Margin="24,20">
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
+
+      <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,16">
+        <TextBlock Grid.Column="0"
+                   Text="Ban Words Filter"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   VerticalAlignment="Center" />
+        <Button Grid.Column="1"
+                Classes="secondary"
+                Content="Инструкция"
+                VerticalAlignment="Center"
+                Command="{Binding InstructionsCommand}" />
+      </Grid>
+
+      <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="8" Margin="0,0,0,16">
+        <Button Classes="tab" Content="Настройки" Command="{Binding SelectSettingsCommand}"
+                Background="{Binding SelectedTab, Converter={StaticResource IntEquals}, ConverterParameter=0, FallbackValue={StaticResource PanelBrush}}" />
+        <Button Classes="tab" Content="Тест фильтра" Command="{Binding SelectTestCommand}" />
+        <Button Classes="tab" Content="Лог" Command="{Binding SelectLogCommand}" />
+      </StackPanel>
+
+      <Grid Grid.Row="2">
+        <Border Classes="panel" IsVisible="{Binding SelectedTab, Converter={StaticResource IntEquals}, ConverterParameter=0}">
+          <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Spacing="14">
+              <ItemsControl ItemsSource="{Binding Fields}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate>
+                    <StackPanel Spacing="4" Margin="0,0,0,10">
+                      <TextBlock Classes="muted" FontSize="13" Text="{Binding Label}" />
+                      <TextBox Text="{Binding Value, Mode=TwoWay}"
+                               PasswordChar="{Binding IsSecret, Converter={StaticResource BoolToPasswordChar}}" />
+                    </StackPanel>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+
+              <WrapPanel Margin="0,8,0,0">
+                <Button Classes="secondary" Content="Сохранить" Margin="0,0,10,10" Command="{Binding SaveCommand}" />
+                <Button Classes="secondary" Content="Проверить токен" Margin="0,0,10,10" Command="{Binding ValidateCommand}" />
+                <Button Classes="secondary" Content="Получить OAuth Token" Margin="0,0,10,10" Command="{Binding OAuthCommand}" />
+                <Button Classes="primary" Content="▶  Старт" Margin="0,0,10,10" Command="{Binding StartCommand}" />
+                <Button Classes="danger" Content="■  Стоп" Margin="0,0,10,10" Command="{Binding StopCommand}" />
+                <Button Classes="secondary" Content="Тест" Margin="0,0,10,10" Command="{Binding ChatTestCommand}" />
+                <Button Classes="danger" Content="Очистить все" Margin="0,0,10,10" Command="{Binding ClearAllCommand}" />
+              </WrapPanel>
+
+              <Border Classes="status" Classes.running="{Binding IsRunning}">
+                <StackPanel Orientation="Horizontal" Spacing="14" VerticalAlignment="Center">
+                  <Ellipse Width="18" Height="18" VerticalAlignment="Center"
+                           Fill="{Binding IsRunning, Converter={StaticResource BoolToBrush}}" />
+                  <TextBlock FontSize="22"
+                             FontWeight="Bold"
+                             VerticalAlignment="Center"
+                             Text="{Binding StatusText}" />
+                </StackPanel>
+              </Border>
+
+              <Border Background="{StaticResource InputBrush}"
+                      BorderBrush="{StaticResource BorderBrush}"
+                      BorderThickness="1"
+                      CornerRadius="12"
+                      Padding="18,16">
+                <StackPanel Spacing="14">
+                  <TextBlock Text="Development by taganovv"
+                             FontSize="16"
+                             FontWeight="SemiBold" />
+                  <StackPanel Orientation="Horizontal" Spacing="10">
+                    <Button Classes="resource" Command="{Binding OpenGithubCommand}">
+                      <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Border Width="24" Height="24" CornerRadius="6" Background="#24292F">
+                          <Path Width="14" Height="14"
+                                Stretch="Uniform"
+                                Fill="White"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Data="M8,0.5 C3.86,0.5 0.5,3.86 0.5,8 C0.5,11.28 2.69,14.08 5.74,15.03 C6.16,15.1 6.31,14.84 6.31,14.61 C6.31,14.4 6.3,13.88 6.3,13.3 C4.13,13.72 3.64,12.56 3.48,12.08 C3.38,11.81 2.98,11.13 2.62,10.92 C2.32,10.75 1.9,10.36 2.61,10.35 C3.28,10.34 3.77,10.97 3.92,11.25 C4.68,12.59 5.94,12.21 6.35,12.01 C6.41,11.53 6.6,11.21 6.81,11.02 C4.97,10.82 3.03,10.19 3.03,7.36 C3.03,6.52 3.33,5.82 3.83,5.28 C3.76,5.09 3.49,4.29 3.9,3.25 C3.9,3.25 4.59,3.02 6.3,4.01 C6.98,3.84 7.69,3.76 8.4,3.76 C9.11,3.76 9.82,3.84 10.5,4.01 C12.21,3.02 12.9,3.25 12.9,3.25 C13.31,4.29 13.04,5.09 12.97,5.28 C13.47,5.82 13.77,6.52 13.77,7.36 C13.77,10.2 11.83,10.82 9.99,11.02 C10.25,11.25 10.48,11.69 10.48,12.37 C10.48,13.38 10.47,14.19 10.47,14.61 C10.47,14.84 10.62,15.11 11.05,15.03 C14.09,14.08 16.28,11.28 16.28,8 C16.28,3.86 12.92,0.5 8.78,0.5 Z" />
+                        </Border>
+                        <TextBlock Text="GitHub" VerticalAlignment="Center" FontWeight="SemiBold" />
+                      </StackPanel>
+                    </Button>
+                    <Button Classes="resource" Command="{Binding OpenTwitchCommand}">
+                      <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Border Width="24" Height="24" CornerRadius="6" Background="#9146FF">
+                          <Path Width="14" Height="14"
+                                Stretch="Uniform"
+                                Fill="White"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Data="M11.571,4.714 H13.286 V9.857 H11.571 Z M16.286,4.714 H18 V9.857 H16.286 Z M6,0 L1.714,4.286 V15.143 H6.857 V12 L10.714,15.714 L17.571,9.5 V0 Z M12,8.571 L11.571,8.571 V5.143 H13.285 V8.571 Z" />
+                        </Border>
+                        <TextBlock Text="Twitch" VerticalAlignment="Center" FontWeight="SemiBold" />
+                      </StackPanel>
+                    </Button>
+                  </StackPanel>
+                </StackPanel>
+              </Border>
+            </StackPanel>
+          </ScrollViewer>
+        </Border>
+
+        <Border Classes="panel" IsVisible="{Binding SelectedTab, Converter={StaticResource IntEquals}, ConverterParameter=1}">
+          <StackPanel Spacing="12">
+            <TextBlock Classes="muted" Text="Проверка фильтра без Twitch" />
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBox Grid.Column="0" Margin="0,0,10,0"
+                       PlaceholderText="Введите тестовое сообщение..."
+                       Text="{Binding TestInput, Mode=TwoWay}" />
+              <Button Grid.Column="1" Classes="primary" Content="Проверить" Command="{Binding TestFilterCommand}" />
+            </Grid>
+            <TextBox Classes="result" Text="{Binding TestResult}" />
+          </StackPanel>
+        </Border>
+
+        <Border Classes="panel" IsVisible="{Binding SelectedTab, Converter={StaticResource IntEquals}, ConverterParameter=2}">
+          <TextBox Classes="log" Text="{Binding LogText}" />
+        </Border>
+      </Grid>
+
+      <Border Grid.Row="3" Margin="0,16,0,0"
+              Background="#262629"
+              BorderBrush="{StaticResource BorderBrush}"
+              BorderThickness="1"
+              CornerRadius="8"
+              Padding="12,10"
+              IsVisible="{Binding ToastVisible}">
+        <TextBlock Text="{Binding ToastMessage}" TextWrapping="Wrap" />
+      </Border>
+    </Grid>
+  </Grid>
+</Window>
