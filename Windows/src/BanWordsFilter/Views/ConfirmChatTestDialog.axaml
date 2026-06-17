@@ -1,0 +1,45 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="BanWordsFilter.Views.ConfirmChatTestDialog"
+        Title="Тест фильтра"
+        Width="460"
+        SizeToContent="Height"
+        CanResize="False"
+        WindowStartupLocation="CenterOwner">
+
+  <Grid RowDefinitions="Auto,Auto" Margin="24">
+    <StackPanel Grid.Row="0" Spacing="12">
+      <TextBlock Text="Проверка работоспособности"
+                 FontSize="18"
+                 FontWeight="Bold" />
+      <TextBlock TextWrapping="Wrap" LineHeight="22"
+                 Text="Фильтр отправит тестовое сообщение в ваш Twitch-чат." />
+      <Border Background="{StaticResource InputBrush}"
+              BorderBrush="{StaticResource BorderBrush}"
+              BorderThickness="1"
+              CornerRadius="8"
+              Padding="12">
+        <TextBlock FontWeight="SemiBold"
+                   FontFamily="Consolas, SF Mono, Menlo, monospace"
+                   TextWrapping="Wrap"
+                   x:Name="MessageText" />
+      </Border>
+      <TextBlock Classes="muted"
+                 TextWrapping="Wrap"
+                 Text="Сообщение увидят зрители в чате. Продолжить?" />
+    </StackPanel>
+
+    <StackPanel Grid.Row="1"
+                Orientation="Horizontal"
+                HorizontalAlignment="Right"
+                Spacing="10"
+                Margin="0,20,0,0">
+      <Button Classes="secondary"
+              Content="Отмена"
+              Click="OnCancelClick" />
+      <Button Classes="primary"
+              Content="Отправить"
+              Click="OnConfirmClick" />
+    </StackPanel>
+  </Grid>
+</Window>
