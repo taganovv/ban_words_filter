@@ -1,0 +1,212 @@
+{
+  "meta": {
+    "version": "1.2.0",
+    "description": "Только запрещённый Twitch контент: hate speech, slurs, угрозы, CSAM. Без обычного мата.",
+    "action": "auto_ban"
+  },
+  "normalization": {
+    "lowercase": true,
+    "strip_zero_width": true,
+    "collapse_repeated_chars_max": 2,
+    "replace_leetspeak": {
+      "0": "o", "1": "i", "3": "e", "4": "a", "5": "s",
+      "6": "g", "7": "t", "8": "b", "9": "g",
+      "@": "a", "$": "s", "!": "i", "|": "i", "€": "e"
+    },
+    "homoglyph_map": {
+      "а": "a", "б": "b", "в": "v", "г": "g", "д": "d", "е": "e", "ё": "e",
+      "ж": "zh", "з": "z", "и": "i", "й": "y", "к": "k", "л": "l", "м": "m",
+      "н": "n", "о": "o", "п": "p", "р": "r", "с": "c", "т": "t", "у": "u",
+      "ф": "f", "х": "h", "ц": "c", "ч": "ch", "ш": "sh", "щ": "sch",
+      "ъ": "", "ы": "y", "ь": "", "э": "e", "ю": "yu", "я": "ya",
+      "і": "i", "ї": "i", "є": "e", "ґ": "g"
+    },
+    "remove_chars": [
+      " ", ".", ",", "-", "_", "*", "+", "|", "/", "\\", "'", "\"", "`", "~",
+      "(", ")", "[", "]", "{", "}", "·", "•", "‒", "–", "—", ":", ";", "!"
+    ]
+  },
+  "categories": {
+    "homophobic_transphobic_ru": {
+      "label": "гомофобия_трансфобия_ру",
+      "severity": "critical",
+      "action": "instant_ban",
+      "comment": "Twitch: hateful conduct / slurs (sexual orientation, gender identity)",
+      "exact": [
+        "пидор", "пидора", "пидоры", "пидорский", "пидорская", "пидорство",
+        "пидорок", "пидоришка", "пидорюга", "пидорина", "пидорятина",
+        "пидорас", "пидорасы", "пидораска", "пидорасина",
+        "пидрила", "пидрило",
+        "педик", "педики", "педрила", "педрилы", "педераст", "педерасты",
+        "гомик", "гомики", "гомосек", "гомосеки", "гомосятина",
+        "трансуха", "лесбуха", "лесбухи",
+        "pidor", "pidora", "pidoras", "pidorasy", "pidory", "pidr", "pidorok",
+        "pidorasina", "pidrila", "pidorina",
+        "p1dor", "p1d0r", "p1doras", "p1dorasina",
+        "pedik", "pediki", "pedrila", "pedril", "pederast", "pederasty", "pederas",
+        "gomik", "gomosek", "homik", "homosek", "transuha"
+      ],
+      "regex": [
+        "p+[iy1!|]+d+[o0]+r+",
+        "p+[iy1!|]+d+[o0]+r+[aа4]+s+",
+        "p+[iy1!|]+d+[o0]+r+[aа4]+s+[iy1!|]+n+[aа4]+",
+        "p+[iy1!|]+d+[o0]+r+[iy1!|]+n+[aа4]+",
+        "p+[iy1!|]+d+r+[iy1!|]+l+[aа4]+",
+        "p+[иi1!|y]+d+[o0дd]+[o0рr]+",
+        "p+[иi1!|y]+d+[o0дd]+[o0рr]+[aа4]+s+",
+        "p+[иi1!|y]+d+[o0дd]+[o0рr]+[aа4]+s+[iy1!|]+n+[aа4]+",
+        "p+[e3]+d+[iy1!|]+[kк]+",
+        "p+[e3]+d+r+[iy1!|]+l+[aа4]+",
+        "g+[o0]+m+[iy1!|]+[kк]+",
+        "g+[o0]+m+[o0]+[s5c]+[e3е]+[kк]+",
+        "t+[rр]+[aа4]+n+[s5c]+[uуy]+[hхx]+[aа4]+"
+      ]
+    },
+    "homophobic_transphobic_en": {
+      "label": "гомофобия_трансфобия_en",
+      "severity": "critical",
+      "action": "instant_ban",
+      "exact": [
+        "faggot", "fag", "fags", "faggots", "fagot", "faggy",
+        "f4ggot", "f4g", "f@ggot", "fa66ot",
+        "dyke", "dykes", "bulldyke",
+        "tranny", "trannies", "trannys",
+        "shemale", "shemales", "ladyboy", "ladyboys"
+      ],
+      "regex": [
+        "f+[ae4@]+g+[g]+[o0]*t*",
+        "f+[ae4@]+g+(?:got|g)?",
+        "d+[yi1!|]+k+[e3]+",
+        "tr+[ae4@]+n+n+[yi1!|]+",
+        "sh+[e3]+m+[ae4@]+[l1]+[e3]+"
+      ]
+    },
+    "racial_ethnic_slurs_ru": {
+      "label": "расизм_этнические_оскорбления_ру",
+      "severity": "critical",
+      "action": "instant_ban",
+      "exact": [
+        "ниггер", "нигга", "ниггеры", "ниггас", "негр", "негры", "негритос",
+        "чурка", "чурки", "чурбан", "чурбаны",
+        "хач", "хачи", "хачик", "хачина",
+        "жид", "жиды", "жидовский", "жидяра",
+        "москаль", "москали", "кацап", "кацапы", "хохол", "хохлы",
+        "черножопый", "черножоп", "чернозад", "чернозады",
+        "churka", "churban", "khach", "hach", "xach",
+        "zhid", "zhyd", "yid", "moskal", "katsap", "khokhol", "hohol",
+        "chernozhopy", "chernojopy", "nigger", "nigga", "n1gger", "n1gga"
+      ],
+      "regex": [
+        "n+[iy1!|]+g+[g]+[ae3]+r?",
+        "n+[iy1!|]+gg+[ae3]+",
+        "ch+[uуy]+r+[kк]+[aа4]",
+        "ch+[uуy]+r+b+[aа4]+n+",
+        "[xhкk]+[aа4]+ch+",
+        "zh+[iy1!|]+d+",
+        "m+[o0]+[s5c]+k+[aа4]+[l1]+",
+        "k+[aа4]+[cс]?[aа4]+p+",
+        "[xhкk]+[o0]+[hх]?[o0]+[l1]+",
+        "ch+[e3]+r+n+[o0]+zh+[o0]+p+"
+      ]
+    },
+    "racial_ethnic_slurs_en": {
+      "label": "расизм_этнические_оскорбления_en",
+      "severity": "critical",
+      "action": "instant_ban",
+      "exact": [
+        "nigger", "nigga", "niggas", "niggaz", "n1gger", "n1gga",
+        "coon", "coons", "chink", "chinks", "gook", "gooks",
+        "spic", "spics", "wetback", "beaner", "beaners",
+        "kike", "kikes", "raghead", "towelhead", "sandnigger",
+        "paki", "pakki", "wog", "redskin", "squaw", "slanteye", "zipperhead"
+      ],
+      "regex": [
+        "n+[i1!|y]+g+[g]+[ae3]+r?",
+        "k+[i1!|y]+k+[e3]+",
+        "ch+[i1!|y]+n+k+",
+        "g+[o0]+[o0]+k+",
+        "sp+[i1!|y]+c+",
+        "r+[ae3]+g+h+[e3]+[ae3]+d+",
+        "p+[ae3]+k+[i1!|y]+"
+      ]
+    },
+    "ableist_slurs": {
+      "label": "оскорбления_инвалидности",
+      "severity": "critical",
+      "action": "instant_ban",
+      "comment": "Twitch: hateful slurs against disability",
+      "exact": ["retard", "retarded", "retards", "tard", "tards", "autist", "spastic", "spaz"],
+      "regex": ["r+[e3]+t+[ae4@]+r+d+", "t+[ae4@]+r+d+"]
+    },
+    "sexual_violence_csam": {
+      "label": "сексуальное_насилие_csam",
+      "severity": "critical",
+      "action": "instant_ban",
+      "comment": "Twitch: sexual violence, CSAM references",
+      "exact": [
+        "pedophile", "pedophiles", "paedophile", "pedophilia",
+        "childporn", "child porn", "rape", "rapist", "raping",
+        "педофил", "педофилы", "педофилия", "изнасилование", "изнасилую",
+        "детское порно", "детпорно"
+      ],
+      "regex": [
+        "p+[e3]+d+[o0]+ph+[iy1!|]+[l1]+[e3]+",
+        "p+[e3]+d+[o0]+f+[iy1!|]+[l1]+",
+        "ch+[iy1!|]+[l1]+d+p+[o0]+r+n+",
+        "r+[ae4@]+p+[e3]+(?:ist|ing)?",
+        "и+[z3]?n+[aа4]+[s5c]+[iy1!|]+[l1]+[o0]+[vva]+[aа4]+n+[iy1!|]+[e3e]+"
+      ]
+    },
+    "violence_threats": {
+      "label": "угрозы_насилия",
+      "severity": "critical",
+      "action": "instant_ban",
+      "comment": "Twitch: threats, KYS, doxxing, swatting",
+      "exact": [
+        "kill yourself", "kill urself", "go kill yourself", "neck yourself",
+        "go die", "hope you die", "kys", "kms",
+        "doxx", "dox", "doxxing", "doxxed", "swatting", "swat you",
+        "school shooter", "mass shooter",
+        "убей себя", "убейся", "сдохни", "повесься", "зарежься",
+        "я тебя убью", "убью тебя", "докс", "доксинг", "доксну", "сват", "сватинг"
+      ],
+      "regex": [
+        "k+[iy1!|y]+[s5](?:$|[^a-z])",
+        "k+m+[s5](?:$|[^a-z])",
+        "k+[iy1!|]+[l1]+[l1]+\\s*[uy]+[o0]+[u]+r+[s5]+[e3]+[l1]+f+",
+        "g+[o0]+\\s*d+[iy1!|y]+[e3]+",
+        "d+[o0]+x+[x]*(?:ing|ed)?",
+        "sw+[ae4@]+t+(?:ting|ted)?",
+        "u+b+[e3]+[iy1!|y]+\\s+s+[e3]+b+[yya]",
+        "[сc]+d+[o0о]+[hхx]+n+[iy1!|y]+",
+        "d+[o0о]+[kкk]+[s5c]+"
+      ]
+    },
+    "self_harm": {
+      "label": "призывы_к_самоповреждению",
+      "severity": "critical",
+      "action": "instant_ban",
+      "comment": "Twitch: encouraging self-harm",
+      "exact": [
+        "how to kill yourself", "suicide method", "suicide tutorial",
+        "hang yourself", "cut yourself",
+        "как покончить с собой", "как убить себя", "способы суицида",
+        "повеситься", "порежься", "режь вены"
+      ],
+      "regex": [
+        "su+[iy1!|y]+c+[iy1!|y]+d+[e3]+\\s*m+[e3]+[t7]+h+[o0]+d+",
+        "h+[ae4@]+n+g+\\s*[uy]+[o0]+[u]+r+[s5]+[e3]+[l1]+f+",
+        "c+[u]+t+\\s*[uy]+[o0]+[u]+r+[s5]+[e3]+[l1]+f+"
+      ]
+    }
+  },
+  "whitelist": {
+    "exact": [
+      "assistant", "passage", "classic", "bass", "assume", "assign", "assess", "asset",
+      "scunthorpe", "cocktail", "peacock", "analysis", "canal", "annals", "document",
+      "titmouse", "titular", "grape", "scrap", "rapid", "period", "happy", "capital",
+      "pedestrian", "pedagogy", "pediatric", "expedition", "competition",
+      "классический", "анализ", "канал", "документ", "геймплей", "стратегия"
+    ]
+  }
+}
