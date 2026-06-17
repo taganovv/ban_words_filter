@@ -632,3 +632,6 @@ dist/Ban Words Filter Windows/Ban Words Filter/BanWordsFilter.exe
 | NSIS 3 + MUI2 | GUI-установщик Setup.exe |
 | Python 3 | Генерация ICO из PNG |
 
+## Поддержать разработчика
+
+[Донат](https://donatex.gg/donate/tagan)
