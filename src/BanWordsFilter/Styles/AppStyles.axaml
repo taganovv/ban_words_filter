@@ -93,6 +93,22 @@
     <Setter Property="FontWeight" Value="SemiBold" />
   </Style>
 
+  <Style Selector="Button.compact">
+    <Setter Property="Padding" Value="14,7" />
+    <Setter Property="MinHeight" Value="34" />
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+  </Style>
+
+  <Style Selector="ProgressBar.thin">
+    <Setter Property="Height" Value="4" />
+    <Setter Property="MinHeight" Value="4" />
+    <Setter Property="MaxHeight" Value="4" />
+    <Setter Property="Foreground" Value="{StaticResource PurpleBrush}" />
+    <Setter Property="Background" Value="{StaticResource BorderBrush}" />
+    <Setter Property="CornerRadius" Value="2" />
+  </Style>
+
   <Style Selector="Button.danger">
     <Setter Property="Background" Value="{StaticResource RedBrush}" />
     <Setter Property="Foreground" Value="White" />

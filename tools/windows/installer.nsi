@@ -1,11 +1,14 @@
 !include "MUI2.nsh"
 !include "LogicLib.nsh"
 !include "nsDialogs.nsh"
+!include "FileFunc.nsh"
+!insertmacro GetParameters
+!insertmacro GetOptions
 
 !define APP_NAME "Ban Words Filter"
 !define APP_EXE "BanWordsFilter.exe"
 !define APP_PUBLISHER "taganovv"
-!define APP_VERSION "2.1.0"
+!define APP_VERSION "2.1.1"
 !define APP_ID "BanWordsFilter"
 !define PAYLOAD_DIR "..\..\dist\installer-payload"
 
@@ -95,4 +98,9 @@ SectionEnd
 
 Function .onInit
   StrCpy $CreateDesktopShortcut 1
+  ${GetParameters} $0
+  ${GetOptions} $0 "/S" $1
+  ${IfNot} $1 == ""
+    SetSilent silent
+  ${EndIf}
 FunctionEnd

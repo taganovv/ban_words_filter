@@ -3,7 +3,7 @@
         x:Class="BanWordsFilter.Views.UpdateCheckingWindow"
         Title="Ban Words Filter"
         Width="360"
-        Height="160"
+        Height="140"
         CanResize="False"
         ShowInTaskbar="True"
         WindowStartupLocation="CenterScreen">
@@ -11,13 +11,13 @@
   <Grid Margin="24">
     <StackPanel HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Spacing="20">
-      <ProgressBar IsIndeterminate="True"
-                   Width="48"
-                   Height="48" />
+                Spacing="16">
+      <ProgressBar Classes="thin"
+                   Width="220"
+                   IsIndeterminate="True" />
       <TextBlock Text="Проверка наличия обновлений"
                  HorizontalAlignment="Center"
-                 FontSize="15"
+                 FontSize="14"
                  FontWeight="SemiBold" />
     </StackPanel>
   </Grid>
