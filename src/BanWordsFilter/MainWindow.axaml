@@ -36,23 +36,23 @@
       </Grid>
 
       <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="8" Margin="0,0,0,16">
-        <Button Classes="tab"
+        <Button Classes="tab nav"
                 Classes.active="{Binding SelectedTab, Converter={StaticResource IntEquals}, ConverterParameter=0}"
                 Content="Настройки"
                 Command="{Binding SelectSettingsCommand}" />
-        <Button Classes="tab"
+        <Button Classes="tab nav"
                 Classes.active="{Binding SelectedTab, Converter={StaticResource IntEquals}, ConverterParameter=1}"
                 Content="Тест фильтра"
                 Command="{Binding SelectTestCommand}" />
-        <Button Classes="tab"
+        <Button Classes="tab nav"
                 Classes.active="{Binding SelectedTab, Converter={StaticResource IntEquals}, ConverterParameter=3}"
                 Content="Словари"
                 Command="{Binding SelectWordListsCommand}" />
-        <Button Classes="tab"
+        <Button Classes="tab nav"
                 Classes.active="{Binding SelectedTab, Converter={StaticResource IntEquals}, ConverterParameter=4}"
                 Content="Баны"
                 Command="{Binding SelectBansCommand}" />
-        <Button Classes="tab"
+        <Button Classes="tab nav"
                 Classes.active="{Binding SelectedTab, Converter={StaticResource IntEquals}, ConverterParameter=2}"
                 Content="Логи"
                 Command="{Binding SelectLogCommand}" />
