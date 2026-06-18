@@ -53,10 +53,9 @@ public partial class App : Application
             checkingWindow.Close();
         }
 
-        if (updateResult.Requirement is UpdateRequirement.Mandatory or UpdateRequirement.Optional)
+        if (updateResult.Requirement == UpdateRequirement.Mandatory)
         {
-            var mandatory = updateResult.Requirement == UpdateRequirement.Mandatory;
-            var dialog = new UpdateDialog(updateResult, mandatory)
+            var dialog = new UpdateDialog(updateResult, mandatory: true)
             {
                 WindowStartupLocation = WindowStartupLocation.CenterScreen
             };
@@ -64,8 +63,21 @@ public partial class App : Application
             dialog.Show();
             await waitTask;
 
-            if (dialog.Outcome is UpdateDialog.UpdateDialogOutcome.ExitApp
-                or UpdateDialog.UpdateDialogOutcome.UpdateCompleted)
+            desktop.Shutdown();
+            return;
+        }
+
+        if (updateResult.Requirement == UpdateRequirement.Optional)
+        {
+            var dialog = new UpdateDialog(updateResult, mandatory: false)
+            {
+                WindowStartupLocation = WindowStartupLocation.CenterScreen
+            };
+            var waitTask = WaitForCloseAsync(dialog);
+            dialog.Show();
+            await waitTask;
+
+            if (dialog.Outcome is UpdateDialog.UpdateDialogOutcome.UpdateCompleted)
             {
                 desktop.Shutdown();
                 return;

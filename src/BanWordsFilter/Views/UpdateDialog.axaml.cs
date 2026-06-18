@@ -32,6 +32,9 @@ public partial class UpdateDialog : Window
     {
         _update = update;
         _mandatory = mandatory;
+        if (mandatory)
+            Outcome = UpdateDialogOutcome.ExitApp;
+
         InitializeComponent();
         ConfigurePrompt();
         Closing += OnClosing;
@@ -175,6 +178,9 @@ public partial class UpdateDialog : Window
 
     protected override void OnClosed(EventArgs e)
     {
+        if (_mandatory && Outcome == UpdateDialogOutcome.ContinueToApp)
+            Outcome = UpdateDialogOutcome.ExitApp;
+
         _updateCts?.Cancel();
         _updateCts?.Dispose();
         Closing -= OnClosing;
