@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
-using System.Text.Json;
 using System.Text.RegularExpressions;
 using BanWordsFilter.Models;
 
@@ -21,12 +18,18 @@ public sealed class MessageFilterService
         ["timeout"] = 0,
     };
 
-    private readonly BannedWordsConfig _config;
-    private readonly HashSet<char> _removeChars;
+    private BannedWordsConfig _config;
+    private HashSet<char> _removeChars;
 
-    public MessageFilterService()
+    public MessageFilterService(BannedWordsConfig config)
     {
-        _config = LoadConfig();
+        _config = config;
+        _removeChars = _config.Normalization.RemoveChars.SelectMany(x => x).ToHashSet();
+    }
+
+    public void Reload(BannedWordsConfig config)
+    {
+        _config = config;
         _removeChars = _config.Normalization.RemoveChars.SelectMany(x => x).ToHashSet();
     }
 
@@ -166,17 +169,4 @@ public sealed class MessageFilterService
 
     private string FilterChars(string text)
         => new string(text.Where(ch => !_removeChars.Contains(ch)).ToArray());
-
-    private static BannedWordsConfig LoadConfig()
-    {
-        var assembly = Assembly.GetExecutingAssembly();
-        var resourceName = assembly.GetManifestResourceNames()
-            .First(name => name.EndsWith("banned-words.json", StringComparison.OrdinalIgnoreCase));
-
-        using var stream = assembly.GetManifestResourceStream(resourceName)
-            ?? throw new InvalidOperationException("Embedded banned-words.json not found.");
-
-        return JsonSerializer.Deserialize<BannedWordsConfig>(stream)
-            ?? throw new InvalidOperationException("Failed to parse banned-words.json.");
-    }
 }

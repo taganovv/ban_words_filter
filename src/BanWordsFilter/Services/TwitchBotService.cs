@@ -13,6 +13,7 @@ namespace BanWordsFilter.Services;
 public sealed class TwitchBotService : IDisposable
 {
     private readonly MessageFilterService _filter;
+    private readonly BanHistoryService _banHistory;
     private readonly Action<string> _log;
 
     private TwitchClient? _client;
@@ -21,9 +22,10 @@ public sealed class TwitchBotService : IDisposable
     private string _broadcasterId = "";
     private string _channel = "";
 
-    public TwitchBotService(MessageFilterService filter, Action<string> log)
+    public TwitchBotService(MessageFilterService filter, BanHistoryService banHistory, Action<string> log)
     {
         _filter = filter;
+        _banHistory = banHistory;
         _log = log;
     }
 
@@ -116,6 +118,7 @@ public sealed class TwitchBotService : IDisposable
                         Reason = reason,
                         Duration = _settings.TimeoutSecondsOrDefault(),
                     });
+                RecordBan(message.Username, userId, reason, match, "timeout");
                 _log($"TIMEOUT {_settings.TimeoutSecondsOrDefault()}s: {message.Username} | matched: {match.Pattern}");
             }
             else
@@ -128,6 +131,7 @@ public sealed class TwitchBotService : IDisposable
                         UserId = userId,
                         Reason = reason,
                     });
+                RecordBan(message.Username, userId, reason, match, "ban");
                 _log($"BAN: {message.Username} | matched: {match.Pattern}");
             }
         }
@@ -135,6 +139,28 @@ public sealed class TwitchBotService : IDisposable
         {
             _log($"[ERROR] Message handler: {ex.Message}");
         }
+    }
+
+    public async Task UnbanUserAsync(string userId)
+    {
+        if (_api is null || _settings is null || string.IsNullOrWhiteSpace(_broadcasterId))
+            throw new InvalidOperationException("Бот не подключён");
+
+        await _api.Helix.Moderation.UnbanUserAsync(_broadcasterId, _settings.TwitchBotId, userId);
+    }
+
+    private void RecordBan(string username, string userId, string reason, FilterMatch match, string action)
+    {
+        _banHistory.Record(new BanRecord
+        {
+            Username = username,
+            UserId = userId,
+            Reason = reason,
+            Pattern = match.Pattern ?? "",
+            Category = match.CategoryLabel ?? match.Category ?? "",
+            Action = action,
+            BannedAt = DateTime.Now,
+        });
     }
 
     public void Dispose()

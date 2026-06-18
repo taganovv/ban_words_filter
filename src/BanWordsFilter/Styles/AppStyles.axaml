@@ -55,6 +55,15 @@
   <Style Selector="Button.tab.active">
     <Setter Property="Background" Value="{StaticResource PurpleBrush}" />
     <Setter Property="BorderBrush" Value="{StaticResource PurpleBrush}" />
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+
+  <Style Selector="Button.tab.active:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="{StaticResource PurpleHoverBrush}" />
+  </Style>
+
+  <Style Selector="Button.tab:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#303035" />
   </Style>
 
   <Style Selector="Button.primary">
@@ -109,6 +118,96 @@
 
   <Style Selector="Button.resource:pointerover /template/ ContentPresenter">
     <Setter Property="Background" Value="#303035" />
+  </Style>
+
+  <Style Selector="Button.reveal">
+    <Setter Property="Background" Value="{StaticResource InputBrush}" />
+    <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="Padding" Value="10,8" />
+    <Setter Property="MinWidth" Value="40" />
+    <Setter Property="MinHeight" Value="40" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="VerticalAlignment" Value="Stretch" />
+  </Style>
+
+  <Style Selector="Button.reveal:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#303035" />
+  </Style>
+
+  <Style Selector="Button.reveal:pointerover Path">
+    <Setter Property="Fill" Value="{StaticResource TextBrush}" />
+  </Style>
+
+  <Style Selector="Button.reveal:pointerover Line">
+    <Setter Property="Stroke" Value="{StaticResource TextBrush}" />
+  </Style>
+
+  <Style Selector="Button.donate">
+    <Setter Property="Background" Value="#C8960C" />
+    <Setter Property="Foreground" Value="#1A1200" />
+    <Setter Property="BorderBrush" Value="#FFD700" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="Padding" Value="12,10" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="ClipToBounds" Value="True" />
+    <Style.Animations>
+      <Animation Duration="0:0:1.6"
+                 IterationCount="INfinite"
+                 PlaybackDirection="Alternate">
+        <KeyFrame Cue="0%">
+          <Setter Property="Background" Value="#B8860B" />
+          <Setter Property="BorderBrush" Value="#FFD700" />
+        </KeyFrame>
+        <KeyFrame Cue="100%">
+          <Setter Property="Background" Value="#FFD54F" />
+          <Setter Property="BorderBrush" Value="#FFF8B0" />
+        </KeyFrame>
+      </Animation>
+    </Style.Animations>
+  </Style>
+
+  <Style Selector="Button.donate:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#FFE082" />
+  </Style>
+
+  <Style Selector="Button.donate Border.donate-shine">
+    <Setter Property="Width" Value="36" />
+    <Setter Property="Height" Value="24" />
+    <Setter Property="Opacity" Value="0.65" />
+    <Setter Property="IsHitTestVisible" Value="False" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="RenderTransformOrigin" Value="50%,50%" />
+    <Setter Property="RenderTransform" Value="rotate(-20deg)" />
+    <Setter Property="Background">
+      <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#00FFFFFF" Offset="0" />
+        <GradientStop Color="#CCFFFFFF" Offset="0.5" />
+        <GradientStop Color="#00FFFFFF" Offset="1" />
+      </LinearGradientBrush>
+    </Setter>
+    <Style.Animations>
+      <Animation Duration="0:0:2.4"
+                 IterationCount="INfinite">
+        <KeyFrame Cue="0%">
+          <Setter Property="TranslateTransform.X" Value="-48" />
+          <Setter Property="Opacity" Value="0" />
+        </KeyFrame>
+        <KeyFrame Cue="15%">
+          <Setter Property="Opacity" Value="0.75" />
+        </KeyFrame>
+        <KeyFrame Cue="85%">
+          <Setter Property="Opacity" Value="0.75" />
+        </KeyFrame>
+        <KeyFrame Cue="100%">
+          <Setter Property="TranslateTransform.X" Value="96" />
+          <Setter Property="Opacity" Value="0" />
+        </KeyFrame>
+      </Animation>
+    </Style.Animations>
   </Style>
 
   <Style Selector="Border.status">

@@ -1,0 +1,4 @@
+dist/
+src/BanWordsFilter/bin/
+src/BanWordsFilter/obj/
+.DS_Store

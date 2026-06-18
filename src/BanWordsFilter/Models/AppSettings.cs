@@ -12,7 +12,6 @@ public static class AppSettings
         "TWITCH_BOT_NAME",
         "TWITCH_BOT_ID",
         "TWITCH_CHANNEL",
-        "TIMEOUT_SECONDS",
     ];
 
     public static readonly IReadOnlyDictionary<string, string> Labels = new Dictionary<string, string>
@@ -23,12 +22,12 @@ public static class AppSettings
         ["TWITCH_BOT_NAME"] = "Ваш логин Twitch",
         ["TWITCH_BOT_ID"] = "Streamer User ID",
         ["TWITCH_CHANNEL"] = "Модерируемый канал",
-        ["TIMEOUT_SECONDS"] = "Timeout (сек, опционально)",
     };
 
     public static readonly HashSet<string> SecretFields =
     [
         "TWITCH_TOKEN",
+        "TWITCH_CLIENT_ID",
         "TWITCH_CLIENT_SECRET",
     ];
 }

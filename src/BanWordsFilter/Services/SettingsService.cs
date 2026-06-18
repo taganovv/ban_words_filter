@@ -18,7 +18,6 @@ public sealed class SettingsService
         "TWITCH_BOT_NAME",
         "TWITCH_BOT_ID",
         "TWITCH_CHANNEL",
-        "TIMEOUT_SECONDS",
     ];
 
     private static string ConfigPath => Path.Combine(BotDirectory.DataDirectory(), "config.json");
@@ -51,7 +50,7 @@ public sealed class SettingsService
         settings.TwitchToken = FormatOAuthToken(settings.TwitchToken);
         settings.TwitchBotName = settings.TwitchBotName.Trim().ToLowerInvariant();
         settings.TwitchChannel = settings.TwitchChannel.Trim().TrimStart('#').ToLowerInvariant();
-        settings.TimeoutSeconds = string.IsNullOrWhiteSpace(settings.TimeoutSeconds) ? "600" : settings.TimeoutSeconds.Trim();
+        settings.TimeoutSeconds = "0";
 
         Directory.CreateDirectory(BotDirectory.DataDirectory());
         var data = ToDictionary(settings);
@@ -79,7 +78,7 @@ public sealed class SettingsService
     public void ClearUserData()
     {
         var dataDir = BotDirectory.DataDirectory();
-        foreach (var file in new[] { "config.json", "startup.log", "install.log", ".deps_ok" })
+        foreach (var file in new[] { "config.json", "user-word-lists.json", "ban-history.json", "startup.log", "install.log", ".deps_ok" })
         {
             try { File.Delete(Path.Combine(dataDir, file)); } catch { }
         }
@@ -122,7 +121,7 @@ public sealed class SettingsService
             TwitchBotName = values.GetValueOrDefault("TWITCH_BOT_NAME", ""),
             TwitchBotId = values.GetValueOrDefault("TWITCH_BOT_ID", ""),
             TwitchChannel = values.GetValueOrDefault("TWITCH_CHANNEL", ""),
-            TimeoutSeconds = values.GetValueOrDefault("TIMEOUT_SECONDS", ""),
+            TimeoutSeconds = "0",
         };
 
     public static Dictionary<string, string> ToDictionary(BotSettings settings)
@@ -134,7 +133,6 @@ public sealed class SettingsService
             ["TWITCH_BOT_NAME"] = settings.TwitchBotName,
             ["TWITCH_BOT_ID"] = settings.TwitchBotId,
             ["TWITCH_CHANNEL"] = settings.TwitchChannel,
-            ["TIMEOUT_SECONDS"] = settings.TimeoutSeconds,
         };
 
     private static string GetFieldValue(BotSettings settings, string key)

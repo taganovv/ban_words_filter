@@ -19,6 +19,7 @@ public partial class MainWindow : Window
         _viewModel.ShowInstructionsRequested += ShowInstructions;
         _viewModel.ConfirmChatTestRequested += ConfirmChatTestAsync;
         _viewModel.ConfirmClearAllRequested += ConfirmClearAllAsync;
+        _viewModel.ConfirmRemoveAllRegexRequested += ConfirmRemoveAllRegexAsync;
         DataContext = _viewModel;
         InitializeComponent();
         Loaded += OnLoaded;
@@ -43,6 +44,12 @@ public partial class MainWindow : Window
         return await dialog.ShowDialog<bool>(this);
     }
 
+    private async Task<bool> ConfirmRemoveAllRegexAsync()
+    {
+        var dialog = new ConfirmRemoveAllRegexDialog { WindowStartupLocation = WindowStartupLocation.CenterOwner };
+        return await dialog.ShowDialog<bool>(this);
+    }
+
     private async void OnLoaded(object? sender, RoutedEventArgs e)
     {
         try
@@ -60,6 +67,7 @@ public partial class MainWindow : Window
         _viewModel.ShowInstructionsRequested -= ShowInstructions;
         _viewModel.ConfirmChatTestRequested -= ConfirmChatTestAsync;
         _viewModel.ConfirmClearAllRequested -= ConfirmClearAllAsync;
+        _viewModel.ConfirmRemoveAllRegexRequested -= ConfirmRemoveAllRegexAsync;
         _viewModel.Dispose();
         _services.Dispose();
     }

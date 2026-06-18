@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace BanWordsFilter.Models;
@@ -37,8 +38,8 @@ public sealed class BotSettings
     public string TwitchBotName { get; set; } = "";
     public string TwitchBotId { get; set; } = "";
     public string TwitchChannel { get; set; } = "";
-    public string TimeoutSeconds { get; set; } = "600";
+    public string TimeoutSeconds { get; set; } = "0";
 
     public int TimeoutSecondsOrDefault()
-        => int.TryParse(TimeoutSeconds, out var value) && value > 0 ? value : 600;
+        => int.TryParse(TimeoutSeconds, out var value) ? Math.Max(0, value) : 0;
 }

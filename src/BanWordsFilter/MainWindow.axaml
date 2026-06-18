@@ -1,6 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:BanWordsFilter.ViewModels"
+        xmlns:models="using:BanWordsFilter.Models"
         xmlns:conv="using:BanWordsFilter.Converters"
         x:Class="BanWordsFilter.MainWindow"
         x:DataType="vm:MainViewModel"
@@ -15,6 +16,7 @@
     <conv:IntEqualsConverter x:Key="IntEquals" />
     <conv:BoolToBrushConverter x:Key="BoolToBrush" />
     <conv:BoolToPasswordCharConverter x:Key="BoolToPasswordChar" />
+    <conv:StringNotEmptyConverter x:Key="StringNotEmpty" />
   </Window.Resources>
 
   <Grid Margin="24,20">
@@ -34,10 +36,26 @@
       </Grid>
 
       <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="8" Margin="0,0,0,16">
-        <Button Classes="tab" Content="Настройки" Command="{Binding SelectSettingsCommand}"
-                Background="{Binding SelectedTab, Converter={StaticResource IntEquals}, ConverterParameter=0, FallbackValue={StaticResource PanelBrush}}" />
-        <Button Classes="tab" Content="Тест фильтра" Command="{Binding SelectTestCommand}" />
-        <Button Classes="tab" Content="Лог" Command="{Binding SelectLogCommand}" />
+        <Button Classes="tab"
+                Classes.active="{Binding SelectedTab, Converter={StaticResource IntEquals}, ConverterParameter=0}"
+                Content="Настройки"
+                Command="{Binding SelectSettingsCommand}" />
+        <Button Classes="tab"
+                Classes.active="{Binding SelectedTab, Converter={StaticResource IntEquals}, ConverterParameter=1}"
+                Content="Тест фильтра"
+                Command="{Binding SelectTestCommand}" />
+        <Button Classes="tab"
+                Classes.active="{Binding SelectedTab, Converter={StaticResource IntEquals}, ConverterParameter=3}"
+                Content="Словари"
+                Command="{Binding SelectWordListsCommand}" />
+        <Button Classes="tab"
+                Classes.active="{Binding SelectedTab, Converter={StaticResource IntEquals}, ConverterParameter=4}"
+                Content="Баны"
+                Command="{Binding SelectBansCommand}" />
+        <Button Classes="tab"
+                Classes.active="{Binding SelectedTab, Converter={StaticResource IntEquals}, ConverterParameter=2}"
+                Content="Логи"
+                Command="{Binding SelectLogCommand}" />
       </StackPanel>
 
       <Grid Grid.Row="2">
@@ -46,25 +64,54 @@
             <StackPanel Spacing="14">
               <ItemsControl ItemsSource="{Binding Fields}">
                 <ItemsControl.ItemTemplate>
-                  <DataTemplate>
+                  <DataTemplate x:DataType="models:SettingFieldViewModel">
                     <StackPanel Spacing="4" Margin="0,0,0,10">
                       <TextBlock Classes="muted" FontSize="13" Text="{Binding Label}" />
-                      <TextBox Text="{Binding Value, Mode=TwoWay}"
-                               PasswordChar="{Binding IsSecret, Converter={StaticResource BoolToPasswordChar}}" />
+                      <Grid ColumnDefinitions="*,Auto">
+                        <TextBox Grid.Column="0"
+                                 Text="{Binding Value, Mode=TwoWay}"
+                                 PasswordChar="{Binding IsMasked, Converter={StaticResource BoolToPasswordChar}}" />
+                        <Button Grid.Column="1"
+                                Classes="reveal"
+                                Command="{Binding ToggleRevealCommand}"
+                                IsVisible="{Binding ShowRevealToggle}"
+                                Margin="8,0,0,0"
+                                ToolTip.Tip="Показать или скрыть значение">
+                          <Viewbox Width="18" Height="18">
+                            <Canvas Width="24" Height="24">
+                              <Path IsVisible="{Binding IsRevealed}"
+                                    Fill="{StaticResource MutedBrush}"
+                                    Data="M12,4.5 C7,4.5 2.73,7.61 1,12 C2.73,16.39 7,19.5 12,19.5 C17,19.5 21.27,16.39 23,12 C21.27,7.61 17,4.5 12,4.5 Z M12,16.5 C9.52,16.5 7.5,14.48 7.5,12 C7.5,9.52 9.52,7.5 12,7.5 C14.48,7.5 16.5,9.52 16.5,12 C16.5,14.48 14.48,16.5 12,16.5 Z M12,10.5 C11.17,10.5 10.5,11.17 10.5,12 C10.5,12.83 11.17,13.5 12,13.5 C12.83,13.5 13.5,12.83 13.5,12 C13.5,11.17 12.83,10.5 12,10.5 Z" />
+                              <Path IsVisible="{Binding !IsRevealed}"
+                                    Fill="{StaticResource MutedBrush}"
+                                    Data="M12,4.5 C7,4.5 2.73,7.61 1,12 C2.73,16.39 7,19.5 12,19.5 C17,19.5 21.27,16.39 23,12 C21.27,7.61 17,4.5 12,4.5 Z M12,16.5 C9.52,16.5 7.5,14.48 7.5,12 C7.5,9.52 9.52,7.5 12,7.5 C14.48,7.5 16.5,9.52 16.5,12 C16.5,14.48 14.48,16.5 12,16.5 Z" />
+                              <Line IsVisible="{Binding !IsRevealed}"
+                                    StartPoint="5,5"
+                                    EndPoint="19,19"
+                                    Stroke="{StaticResource MutedBrush}"
+                                    StrokeThickness="1.8"
+                                    StrokeLineCap="Round" />
+                            </Canvas>
+                          </Viewbox>
+                        </Button>
+                      </Grid>
                     </StackPanel>
                   </DataTemplate>
                 </ItemsControl.ItemTemplate>
               </ItemsControl>
 
-              <WrapPanel Margin="0,8,0,0">
-                <Button Classes="secondary" Content="Сохранить" Margin="0,0,10,10" Command="{Binding SaveCommand}" />
-                <Button Classes="secondary" Content="Проверить токен" Margin="0,0,10,10" Command="{Binding ValidateCommand}" />
-                <Button Classes="secondary" Content="Получить OAuth Token" Margin="0,0,10,10" Command="{Binding OAuthCommand}" />
-                <Button Classes="primary" Content="▶  Старт" Margin="0,0,10,10" Command="{Binding StartCommand}" />
-                <Button Classes="danger" Content="■  Стоп" Margin="0,0,10,10" Command="{Binding StopCommand}" />
-                <Button Classes="secondary" Content="Тест" Margin="0,0,10,10" Command="{Binding ChatTestCommand}" />
-                <Button Classes="danger" Content="Очистить все" Margin="0,0,10,10" Command="{Binding ClearAllCommand}" />
-              </WrapPanel>
+              <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,8,0,0">
+                <Button Classes="secondary" Content="Сохранить" Command="{Binding SaveCommand}" />
+                <Button Classes="secondary" Content="Проверить токен" Command="{Binding ValidateCommand}" />
+                <Button Classes="secondary" Content="Получить OAuth Token" Command="{Binding OAuthCommand}" />
+                <Button MinWidth="132"
+                        Content="{Binding BotToggleLabel}"
+                        Command="{Binding ToggleBotCommand}"
+                        Classes.primary="{Binding !IsRunning}"
+                        Classes.danger="{Binding IsRunning}" />
+                <Button Classes="secondary" Content="Тест" Command="{Binding ChatTestCommand}" />
+                <Button Classes="danger" Content="Очистить все" Command="{Binding ClearAllCommand}" />
+              </StackPanel>
 
               <Border Classes="status" Classes.running="{Binding IsRunning}">
                 <StackPanel Orientation="Horizontal" Spacing="14" VerticalAlignment="Center">
@@ -102,16 +149,28 @@
                     </Button>
                     <Button Classes="resource" Command="{Binding OpenTwitchCommand}">
                       <StackPanel Orientation="Horizontal" Spacing="8">
-                        <Border Width="24" Height="24" CornerRadius="6" Background="#9146FF">
-                          <Path Width="14" Height="14"
-                                Stretch="Uniform"
-                                Fill="White"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Data="M11.571,4.714 H13.286 V9.857 H11.571 Z M16.286,4.714 H18 V9.857 H16.286 Z M6,0 L1.714,4.286 V15.143 H6.857 V12 L10.714,15.714 L17.571,9.5 V0 Z M12,8.571 L11.571,8.571 V5.143 H13.285 V8.571 Z" />
+                        <Border Width="24" Height="24" CornerRadius="6" ClipToBounds="True">
+                          <Image Source="/Assets/twitch-icon.png"
+                                 Width="24"
+                                 Height="24"
+                                 Stretch="UniformToFill" />
                         </Border>
                         <TextBlock Text="Twitch" VerticalAlignment="Center" FontWeight="SemiBold" />
                       </StackPanel>
+                    </Button>
+                    <Button Classes="donate" Command="{Binding OpenDonateCommand}">
+                      <Panel>
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                          <Border Width="24" Height="24" CornerRadius="6" ClipToBounds="True">
+                            <Image Source="/Assets/coin-icon.png"
+                                   Width="24"
+                                   Height="24"
+                                   Stretch="UniformToFill" />
+                          </Border>
+                          <TextBlock Text="Донат" VerticalAlignment="Center" FontWeight="SemiBold" />
+                        </StackPanel>
+                        <Border Classes="donate-shine" />
+                      </Panel>
                     </Button>
                   </StackPanel>
                 </StackPanel>
@@ -135,6 +194,226 @@
 
         <Border Classes="panel" IsVisible="{Binding SelectedTab, Converter={StaticResource IntEquals}, ConverterParameter=2}">
           <TextBox Classes="log" Text="{Binding LogText}" />
+        </Border>
+
+        <Border Classes="panel" IsVisible="{Binding SelectedTab, Converter={StaticResource IntEquals}, ConverterParameter=3}">
+          <Grid RowDefinitions="Auto,Auto,Auto,*,Auto">
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="8" Margin="0,0,0,14">
+              <Button Classes="tab"
+                      Classes.active="{Binding WordListSubTab, Converter={StaticResource IntEquals}, ConverterParameter=0}"
+                      Content="Чёрный список"
+                      Command="{Binding SelectBlacklistCommand}" />
+              <Button Classes="tab"
+                      Classes.active="{Binding WordListSubTab, Converter={StaticResource IntEquals}, ConverterParameter=1}"
+                      Content="Белый список"
+                      Command="{Binding SelectWhitelistCommand}" />
+            </StackPanel>
+
+            <Border Grid.Row="1"
+                    Background="{StaticResource InputBrush}"
+                    BorderBrush="{StaticResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="10"
+                    Padding="14"
+                    Margin="0,0,0,14">
+              <StackPanel Spacing="10">
+                <TextBlock Classes="muted" Text="Добавить слово или фразу" />
+                <Grid ColumnDefinitions="*,Auto">
+                  <TextBox Grid.Column="0" Margin="0,0,10,0"
+                           PlaceholderText="Введите слово..."
+                           Text="{Binding NewWordInput, Mode=TwoWay}" />
+                  <Button Grid.Column="1" Classes="primary" Content="Добавить" Command="{Binding AddWordCommand}" />
+                </Grid>
+                <CheckBox IsChecked="{Binding UseAutomaticRegex, Mode=TwoWay}"
+                          IsEnabled="{Binding RegexCheckboxEnabled}">
+                  <TextBlock Text="Автоматический regex"
+                             ToolTip.Tip="{Binding RegexCheckboxTooltip}" />
+                </CheckBox>
+                <TextBlock Classes="muted"
+                           FontSize="12"
+                           TextWrapping="Wrap"
+                           IsVisible="{Binding ShowRegexHint}"
+                           Text="{Binding RegexHintText}" />
+              </StackPanel>
+            </Border>
+
+            <Border Grid.Row="2"
+                    Background="{StaticResource InputBrush}"
+                    BorderBrush="{StaticResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="10"
+                    Padding="14"
+                    Margin="0,0,0,10"
+                    IsVisible="{Binding WordListSubTab, Converter={StaticResource IntEquals}, ConverterParameter=0}">
+              <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto">
+                <TextBox Grid.Row="0" Grid.Column="0" Margin="0,0,10,0"
+                         PlaceholderText="Поиск по слову, категории или типу (exact / regex)..."
+                         Text="{Binding WordListSearch, Mode=TwoWay}" />
+                <Button Grid.Row="0" Grid.Column="1"
+                        Classes="secondary"
+                        Content="Сбросить"
+                        Command="{Binding ClearWordListSearchCommand}" />
+                <Grid Grid.Row="1" Grid.ColumnSpan="2" ColumnDefinitions="*,Auto" Margin="0,10,0,0">
+                  <TextBlock Grid.Column="0"
+                             Classes="muted"
+                             FontSize="12"
+                             VerticalAlignment="Center"
+                             Text="{Binding BlacklistCountText}" />
+                  <Button Grid.Column="1"
+                          Classes="danger"
+                          Content="{Binding RemoveSearchRegexButtonText}"
+                          IsEnabled="{Binding CanRemoveSearchRegex}"
+                          Command="{Binding RemoveAllBlacklistRegexCommand}" />
+                </Grid>
+              </Grid>
+            </Border>
+
+            <Border Grid.Row="2"
+                    Background="{StaticResource InputBrush}"
+                    BorderBrush="{StaticResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="10"
+                    Padding="14"
+                    Margin="0,0,0,10"
+                    IsVisible="{Binding WordListSubTab, Converter={StaticResource IntEquals}, ConverterParameter=1}">
+              <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto">
+                <TextBox Grid.Row="0" Grid.Column="0" Margin="0,0,10,0"
+                         PlaceholderText="Поиск по слову или категории..."
+                         Text="{Binding WordListSearch, Mode=TwoWay}" />
+                <Button Grid.Row="0" Grid.Column="1"
+                        Classes="secondary"
+                        Content="Сбросить"
+                        Command="{Binding ClearWordListSearchCommand}" />
+                <TextBlock Grid.Row="1" Grid.ColumnSpan="2"
+                           Classes="muted"
+                           FontSize="12"
+                           Margin="0,10,0,0"
+                           Text="{Binding WhitelistCountText}" />
+              </Grid>
+            </Border>
+
+            <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto"
+                          IsVisible="{Binding WordListSubTab, Converter={StaticResource IntEquals}, ConverterParameter=0}">
+              <ItemsControl ItemsSource="{Binding BlacklistEntries}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate x:DataType="models:WordListEntry">
+                    <Border Background="{StaticResource InputBrush}"
+                            BorderBrush="{StaticResource BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Padding="12,10"
+                            Margin="0,0,0,8">
+                      <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Grid.Column="0" Spacing="4">
+                          <TextBlock Text="{Binding Text}" FontWeight="SemiBold" TextWrapping="Wrap" />
+                          <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Classes="muted" FontSize="12" Text="{Binding Type}" />
+                            <TextBlock Classes="muted" FontSize="12" Text="·" />
+                            <TextBlock Classes="muted" FontSize="12" Text="{Binding Category}" />
+                            <TextBlock Classes="muted"
+                                       FontSize="12"
+                                       Text="{Binding LinkedWord, StringFormat=→ {0}}"
+                                       IsVisible="{Binding LinkedWord, Converter={StaticResource StringNotEmpty}}" />
+                          </StackPanel>
+                        </StackPanel>
+                        <Button Grid.Column="1"
+                                Classes="danger"
+                                Content="Удалить"
+                                VerticalAlignment="Center"
+                                Command="{Binding $parent[Window].((vm:MainViewModel)DataContext).RemoveBlacklistEntryCommand}"
+                                CommandParameter="{Binding}" />
+                      </Grid>
+                    </Border>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </ScrollViewer>
+
+            <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto"
+                          IsVisible="{Binding WordListSubTab, Converter={StaticResource IntEquals}, ConverterParameter=1}">
+              <ItemsControl ItemsSource="{Binding WhitelistEntries}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate x:DataType="models:WordListEntry">
+                    <Border Background="{StaticResource InputBrush}"
+                            BorderBrush="{StaticResource BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Padding="12,10"
+                            Margin="0,0,0,8">
+                      <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Grid.Column="0" Spacing="4">
+                          <TextBlock Text="{Binding Text}" FontWeight="SemiBold" TextWrapping="Wrap" />
+                          <TextBlock Classes="muted" FontSize="12" Text="{Binding Category}" />
+                        </StackPanel>
+                        <Button Grid.Column="1"
+                                Classes="danger"
+                                Content="Удалить"
+                                VerticalAlignment="Center"
+                                Command="{Binding $parent[Window].((vm:MainViewModel)DataContext).RemoveWhitelistEntryCommand}"
+                                CommandParameter="{Binding}" />
+                      </Grid>
+                    </Border>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </ScrollViewer>
+
+            <TextBlock Grid.Row="4"
+                       Classes="muted"
+                       FontSize="12"
+                       Margin="0,12,0,0"
+                       TextWrapping="Wrap"
+                       Text="Изменения применяются сразу. Встроенные слова скрываются при удалении, ваши — удаляются полностью." />
+          </Grid>
+        </Border>
+
+        <Border Classes="panel" IsVisible="{Binding SelectedTab, Converter={StaticResource IntEquals}, ConverterParameter=4}">
+          <Grid RowDefinitions="Auto,*">
+            <StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,14">
+              <TextBlock Text="{Binding TodayBansHeader}" FontSize="18" FontWeight="SemiBold" />
+              <TextBlock Classes="muted" FontSize="13" Text="{Binding TodayBansCountText}" />
+              <TextBlock Classes="muted"
+                         FontSize="13"
+                         TextWrapping="Wrap"
+                         IsVisible="{Binding ShowTodayBansEmpty}"
+                         Text="{Binding TodayBansEmptyText}" />
+            </StackPanel>
+
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+              <ItemsControl ItemsSource="{Binding TodayBans}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate x:DataType="models:BanRecord">
+                    <Border Background="{StaticResource InputBrush}"
+                            BorderBrush="{StaticResource BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Padding="12,10"
+                            Margin="0,0,0,8">
+                      <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Grid.Column="0" Spacing="4">
+                          <StackPanel Orientation="Horizontal" Spacing="10">
+                            <TextBlock Text="{Binding Username}" FontWeight="Bold" FontSize="16" />
+                            <TextBlock Classes="muted" FontSize="12" VerticalAlignment="Center" Text="{Binding BannedAtText}" />
+                            <TextBlock Classes="muted" FontSize="12" VerticalAlignment="Center" Text="{Binding ActionLabel}" />
+                          </StackPanel>
+                          <TextBlock Text="{Binding Reason}" TextWrapping="Wrap" />
+                          <TextBlock Classes="muted" FontSize="12" TextWrapping="Wrap"
+                                     Text="{Binding Pattern, StringFormat=Совпадение: {0}}" />
+                          <TextBlock Classes="muted" FontSize="12" Text="{Binding Category, StringFormat=Категория: {0}}" />
+                        </StackPanel>
+                        <Button Grid.Column="1"
+                                Classes="secondary"
+                                Content="Разбан"
+                                VerticalAlignment="Center"
+                                Command="{Binding $parent[Window].((vm:MainViewModel)DataContext).UnbanUserCommand}"
+                                CommandParameter="{Binding}" />
+                      </Grid>
+                    </Border>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </ScrollViewer>
+          </Grid>
         </Border>
       </Grid>
 

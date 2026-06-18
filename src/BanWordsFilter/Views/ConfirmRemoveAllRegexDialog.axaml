@@ -1,0 +1,35 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="BanWordsFilter.Views.ConfirmRemoveAllRegexDialog"
+        Title="Удалить regex для слова"
+        Width="480"
+        SizeToContent="Height"
+        CanResize="False"
+        WindowStartupLocation="CenterOwner">
+
+  <Grid RowDefinitions="Auto,Auto" Margin="24">
+    <StackPanel Grid.Row="0" Spacing="12">
+      <TextBlock Text="Удалить regex для найденного слова?"
+                 FontSize="18"
+                 FontWeight="Bold" />
+      <TextBlock TextWrapping="Wrap" LineHeight="22"
+                 Text="Будут удалены только regex-паттерны, связанные со словом из поля поиска. Точные совпадения (exact) останутся." />
+      <TextBlock Classes="muted"
+                 TextWrapping="Wrap"
+                 Text="Удаляются regex из результатов поиска: паттерны с совпадением в тексте, из той же категории, что и слово, и автоматически созданные regex." />
+    </StackPanel>
+
+    <StackPanel Grid.Row="1"
+                Orientation="Horizontal"
+                HorizontalAlignment="Right"
+                Spacing="10"
+                Margin="0,20,0,0">
+      <Button Classes="secondary"
+              Content="Отмена"
+              Click="OnCancelClick" />
+      <Button Classes="danger"
+              Content="Удалить regex"
+              Click="OnConfirmClick" />
+    </StackPanel>
+  </Grid>
+</Window>
