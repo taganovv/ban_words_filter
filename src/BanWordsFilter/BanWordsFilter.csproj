@@ -7,7 +7,7 @@
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <AssemblyName>BanWordsFilter</AssemblyName>
     <Product>Ban Words Filter</Product>
-    <Version>2.1.7</Version>
+    <Version>2.1.8</Version>
     <ApplicationIcon>Assets\app-icon.ico</ApplicationIcon>
   </PropertyGroup>
 
