@@ -10,6 +10,7 @@ namespace BanWordsFilter.Services;
 public sealed class MessageFilterService
 {
     private static readonly Regex ZeroWidth = new(@"[\u200b-\u200d\ufeff\u00ad]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+    private static readonly Regex BangObfuscation = new(@"^!+(?=\S)|(?<=\s)!+(?=\S)", RegexOptions.Compiled);
     private static readonly Dictionary<string, int> ActionPriority = new()
     {
         ["instant_ban"] = 3,
@@ -117,6 +118,7 @@ public sealed class MessageFilterService
         var raw = text.ToLowerInvariant();
         if (_config.Normalization.StripZeroWidth)
             raw = ZeroWidth.Replace(raw, "");
+        raw = StripBangObfuscation(raw);
         raw = FilterChars(raw);
         raw = ApplyLeetspeak(raw);
         if (!string.IsNullOrEmpty(raw) && !variants.Contains(raw))
@@ -134,6 +136,7 @@ public sealed class MessageFilterService
         if (_config.Normalization.StripZeroWidth)
             text = ZeroWidth.Replace(text, "");
 
+        text = StripBangObfuscation(text);
         text = ApplyHomoglyphs(text);
         text = ApplyLeetspeak(text);
         text = FilterChars(text);
@@ -169,4 +172,7 @@ public sealed class MessageFilterService
 
     private string FilterChars(string text)
         => new string(text.Where(ch => !_removeChars.Contains(ch)).ToArray());
+
+    private static string StripBangObfuscation(string text)
+        => BangObfuscation.Replace(text, "");
 }

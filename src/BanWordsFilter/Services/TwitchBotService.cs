@@ -90,9 +90,6 @@ public sealed class TwitchBotService : IDisposable
                 return;
 
             var content = message.Message ?? "";
-            if (content.StartsWith('!'))
-                return;
-
             var result = _filter.CheckMessage(content);
             if (!result.Banned || result.TopMatch is null)
                 return;
