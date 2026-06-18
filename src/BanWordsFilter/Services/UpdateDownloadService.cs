@@ -46,25 +46,6 @@ public sealed class UpdateDownloadService
         return destinationPath;
     }
 
-    public async Task RunInstallerAsync(string installerPath, CancellationToken cancellationToken = default)
-    {
-        var startInfo = new ProcessStartInfo
-        {
-            FileName = installerPath,
-            Arguments = "/S",
-            UseShellExecute = true,
-            Verb = "runas"
-        };
-
-        using var process = Process.Start(startInfo)
-            ?? throw new InvalidOperationException("Не удалось запустить установщик.");
-
-        await process.WaitForExitAsync(cancellationToken);
-
-        if (process.ExitCode != 0)
-            throw new InvalidOperationException($"Установщик завершился с кодом {process.ExitCode}.");
-    }
-
     private static HttpClient CreateDownloadClient()
     {
         var version = Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "0.0.0";

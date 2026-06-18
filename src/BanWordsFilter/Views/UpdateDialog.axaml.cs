@@ -21,6 +21,7 @@ public partial class UpdateDialog : Window
     private readonly UpdateCheckResult _update;
     private readonly bool _mandatory;
     private readonly UpdateDownloadService _downloadService = new();
+    private readonly UpdateApplyService _applyService = new();
     private CancellationTokenSource? _updateCts;
     private bool _isUpdating;
     private bool _updateBlockedClose;
@@ -89,8 +90,7 @@ public partial class UpdateDialog : Window
 
         DownloadProgressBar.IsIndeterminate = false;
         DownloadProgressBar.Value = 0;
-        ProgressStatusText.Text = "Загрузка обновления...";
-        ProgressDetailText.Text = "0%";
+        SetProgressStep(1, "Загрузка обновления...", "0%");
 
         try
         {
@@ -100,20 +100,19 @@ public partial class UpdateDialog : Window
                 progress,
                 _updateCts.Token);
 
-            ProgressStatusText.Text = "Установка обновления...";
-            ProgressDetailText.Text = "Пожалуйста, подождите";
+            SetProgressStep(2, "Удаление старой версии...", "Подготовка...");
             DownloadProgressBar.IsIndeterminate = true;
+            await Task.Delay(400, _updateCts.Token);
 
-            await _downloadService.RunInstallerAsync(installerPath, _updateCts.Token);
+            SetProgressStep(3, "Установка новой версии...", "Скоро приложение перезапустится");
+            await Task.Delay(400, _updateCts.Token);
+
+            SetProgressStep(4, "Запуск новой версии...", "Приложение откроется автоматически");
+            _applyService.ScheduleSeamlessUpdate(installerPath);
 
             Outcome = UpdateDialogOutcome.UpdateCompleted;
-            ProgressStatusText.Text = "Обновление установлено";
-            ProgressDetailText.Text = "Приложение будет закрыто";
-            DownloadProgressBar.IsIndeterminate = false;
-            DownloadProgressBar.Value = 100;
-
-            await Task.Delay(1200, _updateCts.Token);
             _updateBlockedClose = false;
+            await Task.Delay(900, _updateCts.Token);
             Close();
         }
         catch (OperationCanceledException)
@@ -126,6 +125,12 @@ public partial class UpdateDialog : Window
         }
     }
 
+    private void SetProgressStep(int step, string status, string detail)
+    {
+        ProgressStatusText.Text = $"Шаг {step} из 4: {status}";
+        ProgressDetailText.Text = detail;
+    }
+
     private void UpdateDownloadProgress(DownloadProgress progress)
     {
         Dispatcher.UIThread.Post(() =>
@@ -134,7 +139,8 @@ public partial class UpdateDialog : Window
             {
                 DownloadProgressBar.IsIndeterminate = false;
                 DownloadProgressBar.Value = percent;
-                ProgressDetailText.Text = $"{percent:0}% · {FormatBytes(progress.BytesReceived)} из {FormatBytes(progress.TotalBytes!.Value)}";
+                ProgressDetailText.Text =
+                    $"{percent:0}% · {FormatBytes(progress.BytesReceived)} из {FormatBytes(progress.TotalBytes!.Value)}";
             }
             else
             {

@@ -8,7 +8,7 @@
 !define APP_NAME "Ban Words Filter"
 !define APP_EXE "BanWordsFilter.exe"
 !define APP_PUBLISHER "taganovv"
-!define APP_VERSION "2.1.2"
+!define APP_VERSION "2.1.3"
 !define APP_ID "BanWordsFilter"
 !define PAYLOAD_DIR "..\..\dist\installer-payload"
 
@@ -98,6 +98,14 @@ SectionEnd
 
 Function .onInit
   StrCpy $CreateDesktopShortcut 1
+  ${GetParameters} $0
+  ${GetOptions} $0 "/S" $1
+  ${IfNot} $1 == ""
+    SetSilent silent
+  ${EndIf}
+FunctionEnd
+
+Function un.onInit
   ${GetParameters} $0
   ${GetOptions} $0 "/S" $1
   ${IfNot} $1 == ""
