@@ -134,19 +134,21 @@
                         Classes="status status-panel"
                         Classes.running="{Binding IsRunning}"
                         Margin="16,0,0,0">
-                  <StackPanel Spacing="12"
-                              VerticalAlignment="Center"
-                              HorizontalAlignment="Center">
-                    <Ellipse Width="20"
-                             Height="20"
-                             HorizontalAlignment="Center"
+                  <Grid ColumnDefinitions="Auto,*"
+                        VerticalAlignment="Center">
+                    <Ellipse Grid.Column="0"
+                             Width="28"
+                             Height="28"
+                             Margin="0,0,16,0"
+                             VerticalAlignment="Center"
                              Fill="{Binding IsRunning, Converter={StaticResource BoolToBrush}}" />
-                    <TextBlock FontSize="16"
+                    <TextBlock Grid.Column="1"
+                               FontSize="18"
                                FontWeight="Bold"
-                               TextAlignment="Center"
+                               VerticalAlignment="Center"
                                TextWrapping="Wrap"
                                Text="{Binding StatusText}" />
-                  </StackPanel>
+                  </Grid>
                 </Border>
               </Grid>
 
