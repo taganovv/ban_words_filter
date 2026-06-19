@@ -5,9 +5,14 @@ namespace BanWordsFilter;
 
 class Program
 {
+    internal static bool IsDuplicateInstance { get; private set; }
+
     [STAThread]
-    public static void Main(string[] args) => BuildAvaloniaApp()
-        .StartWithClassicDesktopLifetime(args);
+    public static void Main(string[] args)
+    {
+        IsDuplicateInstance = !Services.SingleInstanceGuard.TryEnter();
+        BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+    }
 
     public static AppBuilder BuildAvaloniaApp()
         => AppBuilder.Configure<App>()

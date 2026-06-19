@@ -8,7 +8,7 @@
 !define APP_NAME "Ban Words Filter"
 !define APP_EXE "BanWordsFilter.exe"
 !define APP_PUBLISHER "taganovv"
-!define APP_VERSION "2.1.9"
+!define APP_VERSION "2.2.0"
 !define APP_ID "BanWordsFilter"
 !define PAYLOAD_DIR "..\..\dist\installer-payload"
 

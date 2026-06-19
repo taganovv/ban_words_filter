@@ -22,6 +22,19 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
+            if (Program.IsDuplicateInstance)
+            {
+                desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+                var dialog = new AlreadyRunningDialog
+                {
+                    WindowStartupLocation = WindowStartupLocation.CenterScreen
+                };
+                dialog.Closed += (_, _) => desktop.Shutdown();
+                dialog.Show();
+                base.OnFrameworkInitializationCompleted();
+                return;
+            }
+
             desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
             _ = RunStartupAsync(desktop);
         }
