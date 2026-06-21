@@ -72,7 +72,6 @@ public sealed partial class MainViewModel : INotifyPropertyChanged, IDisposable
         ClearWordListSearchCommand = new RelayCommand(ClearWordListSearch);
         InstructionsCommand = new RelayCommand(() => ShowInstructionsRequested?.Invoke());
         OpenGithubCommand = new RelayCommand(OpenGithub);
-        OpenTwitchCommand = new RelayCommand(OpenTwitch);
         OpenDonateCommand = new RelayCommand(OpenDonate);
 
         _pollTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
@@ -104,7 +103,6 @@ public sealed partial class MainViewModel : INotifyPropertyChanged, IDisposable
     public ICommand ClearWordListSearchCommand { get; }
     public ICommand InstructionsCommand { get; }
     public ICommand OpenGithubCommand { get; }
-    public ICommand OpenTwitchCommand { get; }
     public ICommand OpenDonateCommand { get; }
 
     public event Action? ShowInstructionsRequested;
@@ -327,9 +325,6 @@ public sealed partial class MainViewModel : INotifyPropertyChanged, IDisposable
 
     public static void OpenGithub()
         => OpenUrl(AppConstants.GithubUrl);
-
-    public static void OpenTwitch()
-        => OpenUrl(AppConstants.TwitchUrl);
 
     public static void OpenDonate()
         => OpenUrl(AppConstants.DonateUrl);

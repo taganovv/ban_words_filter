@@ -8,9 +8,9 @@
 !define APP_NAME "Ban Words Filter"
 !define APP_EXE "BanWordsFilter.exe"
 !define APP_PUBLISHER "taganovv"
-!define APP_VERSION "4.1.1"
+!define APP_VERSION "5.0.0"
 !define APP_ID "BanWordsFilter"
-!define DONATE_URL "https://donatex.gg/donate/tagan"
+!define DONATE_URL "https://pay.cloudtips.ru/p/774673f3"
 !define PAYLOAD_DIR "..\..\dist\installer-payload"
 
 Name "${APP_NAME}"

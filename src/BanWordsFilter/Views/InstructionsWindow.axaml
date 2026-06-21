@@ -43,10 +43,6 @@
                    Classes="muted" />
         <StackPanel Orientation="Horizontal" Spacing="6">
           <Button Classes="link"
-                  Content="Twitch"
-                  Click="OnOpenTwitchClick" />
-          <TextBlock Text="·" Classes="muted" VerticalAlignment="Center" />
-          <Button Classes="link"
                   Content="GitHub"
                   Click="OnOpenGithubClick" />
           <TextBlock Text="·" Classes="muted" VerticalAlignment="Center" />

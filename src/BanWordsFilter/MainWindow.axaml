@@ -185,17 +185,6 @@
                           <TextBlock Text="GitHub" VerticalAlignment="Center" FontWeight="SemiBold" />
                         </StackPanel>
                       </Button>
-                      <Button Classes="resource" Command="{Binding OpenTwitchCommand}">
-                        <StackPanel Orientation="Horizontal" Spacing="8">
-                          <Border Width="24" Height="24" CornerRadius="6" ClipToBounds="True">
-                            <Image Source="/Assets/twitch-icon.png"
-                                   Width="24"
-                                   Height="24"
-                                   Stretch="UniformToFill" />
-                          </Border>
-                          <TextBlock Text="Twitch" VerticalAlignment="Center" FontWeight="SemiBold" />
-                        </StackPanel>
-                      </Button>
                       <Button Classes="donate" Command="{Binding OpenDonateCommand}">
                         <Panel>
                           <StackPanel Orientation="Horizontal" Spacing="8">

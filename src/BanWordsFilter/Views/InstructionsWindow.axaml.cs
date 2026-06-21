@@ -273,9 +273,6 @@ public partial class InstructionsWindow : Window
     private void OnOpenTwitchDevClick(object? sender, RoutedEventArgs e)
         => OpenUrl("https://dev.twitch.tv/");
 
-    private void OnOpenTwitchClick(object? sender, RoutedEventArgs e)
-        => OpenUrl(AppConstants.TwitchUrl);
-
     private void OnOpenGithubClick(object? sender, RoutedEventArgs e)
         => OpenUrl(AppConstants.GithubUrl);
 

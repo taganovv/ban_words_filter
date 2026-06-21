@@ -134,8 +134,7 @@ ban_words_filter/
 │       ├── Assets/
 │       │   ├── app-icon.png
 │       │   ├── app-icon.ico
-│       │   ├── coin-icon.png
-│       │   └── twitch-icon.png
+│       │   └── coin-icon.png
 │       └── app.manifest
 └── tools/
     ├── build_windows_app.sh
@@ -143,7 +142,6 @@ ban_words_filter/
     ├── build_windows_installer.sh
     ├── generate_app_icon.py
     ├── generate_coin_icon.py
-    ├── generate_twitch_icon.py
     └── windows/
         ├── installer.nsi
         └── build_installer.ps1
@@ -193,7 +191,7 @@ C:\Program Files\Ban Words Filter\
 | `HKLM\Software\BanWordsFilter\InstallDir` | Путь установки |
 | `HKLM\...\Uninstall\BanWordsFilter\DisplayName` | Ban Words Filter |
 | `...\UninstallString` | `"C:\...\Uninstall.exe"` |
-| `...\DisplayVersion` | 4.1.1 |
+| `...\DisplayVersion` | 5.0.0 |
 | `...\Publisher` | taganovv |
 
 ### Ярлыки
@@ -528,7 +526,7 @@ Avalonia UI с тёмной темой, шрифт **Inter**. Пять вкла�
 - **Windows 10+** или macOS/Linux с кросс-компиляцией
 - [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
 - [NSIS 3](https://nsis.sourceforge.io/Download) (`makensis` в PATH)
-- Python 3 (для `generate_app_icon.py`, `generate_coin_icon.py`, `generate_twitch_icon.py`)
+- Python 3 (для `generate_app_icon.py`, `generate_coin_icon.py`)
 
 На macOS для сборки Windows-установщика:
 
@@ -626,7 +624,6 @@ dist/Ban Words Filter Windows/Ban Words Filter/BanWordsFilter.exe
 ## Лицензия и контакты
 
 - **Автор:** [taganovv](https://github.com/taganovv)
-- **Twitch:** [twitch.tv/taganovv](https://www.twitch.tv/taganovv)
 
 ---
 
@@ -651,4 +648,4 @@ dist/Ban Words Filter Windows/Ban Words Filter/BanWordsFilter.exe
 
 ## Поддержать разработчика
 
-[Донат](https://donatex.gg/donate/tagan)
+[Поддержать разработчика](https://pay.cloudtips.ru/p/774673f3)
