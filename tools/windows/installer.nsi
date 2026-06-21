@@ -8,7 +8,7 @@
 !define APP_NAME "Ban Words Filter"
 !define APP_EXE "BanWordsFilter.exe"
 !define APP_PUBLISHER "taganovv"
-!define APP_VERSION "4.0.0"
+!define APP_VERSION "4.0.1"
 !define APP_ID "BanWordsFilter"
 !define DONATE_URL "https://donatex.gg/donate/tagan"
 !define PAYLOAD_DIR "..\..\dist\installer-payload"
@@ -42,6 +42,49 @@ Page custom FinishPage FinishPageLeave
 !insertmacro MUI_UNPAGE_INSTFILES
 
 !insertmacro MUI_LANGUAGE "Russian"
+
+!define LOCKED_FILES_MSG "Не удалось установить ${APP_NAME}.$\r$\n$\r$\nФайлы программы заняты и не могут быть перезаписаны.$\r$\n$\r$\nЧто сделать:$\r$\n1. Закройте программу через иконку в трее → «Выход»$\r$\n   или завершите ${APP_EXE} в диспетчере задач.$\r$\n2. Запустите установщик снова.$\r$\n$\r$\nЕсли программа не запущена, проверьте антивирус или перезагрузите компьютер."
+
+!macro DefineAppProcessHelpers UNPREFIX RETRYTAG
+Function ${UNPREFIX}IsAppRunning
+  ClearErrors
+  ExecWait 'cmd /c tasklist /FI "IMAGENAME eq ${APP_EXE}" /NH | find /I "${APP_EXE}"' $0
+FunctionEnd
+
+Function ${UNPREFIX}CloseRunningAppWithRetry
+  StrCpy $R1 0
+${RETRYTAG}:
+  DetailPrint "Закрытие ${APP_NAME}..."
+  ExecWait '"$SYSDIR\taskkill.exe" /F /IM "${APP_EXE}" /T' $0
+  Sleep 1500
+  Call ${UNPREFIX}IsAppRunning
+  ${If} $0 != 0
+    Return
+  ${EndIf}
+  IntOp $R1 $R1 + 1
+  ${If} $R1 < 3
+    Goto ${RETRYTAG}
+  ${EndIf}
+FunctionEnd
+
+Function ${UNPREFIX}EnsureAppNotRunningOrAbort
+  Call ${UNPREFIX}CloseRunningAppWithRetry
+  Call ${UNPREFIX}IsAppRunning
+  ${If} $0 != 0
+    Return
+  ${EndIf}
+
+  ${If} ${Silent}
+    Return
+  ${EndIf}
+
+  MessageBox MB_ICONSTOP|MB_OK "${LOCKED_FILES_MSG}"
+  Abort
+FunctionEnd
+!macroend
+
+!insertmacro DefineAppProcessHelpers "" "retry_install"
+!insertmacro DefineAppProcessHelpers "un." "retry_uninstall"
 
 Function DesktopShortcutPage
   !insertmacro MUI_HEADER_TEXT "Дополнительные параметры" "Выберите параметры установки"
@@ -111,7 +154,9 @@ FunctionEnd
 
 Section "Ban Words Filter" SecMain
   SectionIn RO
+  Call EnsureAppNotRunningOrAbort
   SetOutPath "$INSTDIR"
+  AllowSkipFiles off
   File /r "${PAYLOAD_DIR}\*.*"
 
   WriteRegStr HKLM "Software\${APP_ID}" "InstallDir" "$INSTDIR"
@@ -135,6 +180,7 @@ Section "Ban Words Filter" SecMain
 SectionEnd
 
 Section "Uninstall"
+  Call un.EnsureAppNotRunningOrAbort
   Delete "$DESKTOP\${APP_NAME}.lnk"
   RMDir /r "$SMPROGRAMS\${APP_NAME}"
   RMDir /r "$INSTDIR"
@@ -159,6 +205,12 @@ Function un.onInit
   ${GetOptions} $0 "/S" $1
   ${IfNot} $1 == ""
     SetSilent silent
+  ${EndIf}
+FunctionEnd
+
+Function .onInstFailed
+  ${IfNot} ${Silent}
+    MessageBox MB_ICONSTOP|MB_OK "${LOCKED_FILES_MSG}"
   ${EndIf}
 FunctionEnd
 

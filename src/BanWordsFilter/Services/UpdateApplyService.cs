@@ -100,10 +100,28 @@ public sealed class UpdateApplyService
               }
             }
 
-            try {
+            function Wait-ForAppExit {
+              param([Parameter(Mandatory = $true)][int]$ProcessId)
+
               Write-Log "Ожидание завершения приложения (PID=$ProcessId)"
-              Wait-Process -Id $ProcessId -ErrorAction SilentlyContinue
-              Start-Sleep -Seconds 1
+              $timeoutSeconds = 60
+              for ($elapsed = 0; $elapsed -lt $timeoutSeconds; $elapsed++) {
+                if (-not (Get-Process -Id $ProcessId -ErrorAction SilentlyContinue)) {
+                  Start-Sleep -Seconds 1
+                  return
+                }
+
+                Start-Sleep -Seconds 1
+              }
+
+              Write-Log "Принудительное завершение BanWordsFilter (PID=$ProcessId)"
+              Stop-Process -Id $ProcessId -Force -ErrorAction SilentlyContinue
+              Get-Process -Name BanWordsFilter -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+              Start-Sleep -Seconds 2
+            }
+
+            try {
+              Wait-ForAppExit -ProcessId $ProcessId
 
               if ($UninstallerPath -and (Test-Path -LiteralPath $UninstallerPath)) {
                 Write-Log "Удаление предыдущей версии: $UninstallerPath"

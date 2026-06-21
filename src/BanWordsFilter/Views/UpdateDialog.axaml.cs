@@ -115,7 +115,6 @@ public partial class UpdateDialog : Window
 
             Outcome = UpdateDialogOutcome.UpdateCompleted;
             _updateBlockedClose = false;
-            await Task.Delay(900, _updateCts.Token);
             Close();
         }
         catch (OperationCanceledException)
