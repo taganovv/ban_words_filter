@@ -18,8 +18,10 @@
     <Border Grid.Row="1"
             Classes="panel"
             Padding="16">
-      <ScrollViewer VerticalScrollBarVisibility="Auto">
+      <ScrollViewer Classes="gutter"
+                    VerticalScrollBarVisibility="Auto">
         <TextBlock x:Name="InstructionsText"
+                   Classes="scroll-gutter"
                    TextWrapping="Wrap"
                    FontSize="13"
                    LineHeight="22" />

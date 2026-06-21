@@ -8,8 +8,9 @@
 !define APP_NAME "Ban Words Filter"
 !define APP_EXE "BanWordsFilter.exe"
 !define APP_PUBLISHER "taganovv"
-!define APP_VERSION "3.2.0"
+!define APP_VERSION "4.0.0"
 !define APP_ID "BanWordsFilter"
+!define DONATE_URL "https://donatex.gg/donate/tagan"
 !define PAYLOAD_DIR "..\..\dist\installer-payload"
 
 Name "${APP_NAME}"
@@ -21,6 +22,11 @@ ShowInstDetails show
 Unicode true
 
 Var CreateDesktopShortcut
+Var OpenAfterInstall
+Var SupportDeveloper
+Var FinishPageConfirmed
+Var FinishOpenProgramCheckbox
+Var FinishSupportDeveloperCheckbox
 
 !define MUI_ABORTWARNING
 !define MUI_ICON "${PAYLOAD_DIR}\app-icon.ico"
@@ -30,7 +36,7 @@ Var CreateDesktopShortcut
 !insertmacro MUI_PAGE_DIRECTORY
 Page custom DesktopShortcutPage DesktopShortcutPageLeave
 !insertmacro MUI_PAGE_INSTFILES
-!insertmacro MUI_PAGE_FINISH
+Page custom FinishPage FinishPageLeave
 
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
@@ -60,6 +66,46 @@ Function DesktopShortcutPageLeave
     StrCpy $CreateDesktopShortcut 1
   ${Else}
     StrCpy $CreateDesktopShortcut 0
+  ${EndIf}
+FunctionEnd
+
+Function FinishPage
+  ${If} ${Silent}
+    Abort
+  ${EndIf}
+
+  !insertmacro MUI_HEADER_TEXT "Установка завершена" "Ban Words Filter готов к работе"
+
+  nsDialogs::Create 1018
+  Pop $0
+  ${IfThen} $0 == error ${|} Abort ${|}
+
+  ${NSD_CreateCheckbox} 0 0 100% 12u "Открыть программу"
+  Pop $FinishOpenProgramCheckbox
+  ${NSD_Check} $FinishOpenProgramCheckbox
+
+  ${NSD_CreateCheckbox} 0 20u 100% 12u "Поддержать разработчика"
+  Pop $FinishSupportDeveloperCheckbox
+  ${NSD_Check} $FinishSupportDeveloperCheckbox
+
+  nsDialogs::Show
+FunctionEnd
+
+Function FinishPageLeave
+  StrCpy $FinishPageConfirmed 1
+
+  ${NSD_GetState} $FinishOpenProgramCheckbox $0
+  ${If} $0 == ${BST_CHECKED}
+    StrCpy $OpenAfterInstall 1
+  ${Else}
+    StrCpy $OpenAfterInstall 0
+  ${EndIf}
+
+  ${NSD_GetState} $FinishSupportDeveloperCheckbox $0
+  ${If} $0 == ${BST_CHECKED}
+    StrCpy $SupportDeveloper 1
+  ${Else}
+    StrCpy $SupportDeveloper 0
   ${EndIf}
 FunctionEnd
 
@@ -98,6 +144,9 @@ SectionEnd
 
 Function .onInit
   StrCpy $CreateDesktopShortcut 1
+  StrCpy $OpenAfterInstall 0
+  StrCpy $SupportDeveloper 0
+  StrCpy $FinishPageConfirmed 0
   ${GetParameters} $0
   ${GetOptions} $0 "/S" $1
   ${IfNot} $1 == ""
@@ -110,5 +159,23 @@ Function un.onInit
   ${GetOptions} $0 "/S" $1
   ${IfNot} $1 == ""
     SetSilent silent
+  ${EndIf}
+FunctionEnd
+
+Function .onGUIEnd
+  ${If} ${Silent}
+    Return
+  ${EndIf}
+
+  ${If} $FinishPageConfirmed != 1
+    Return
+  ${EndIf}
+
+  ${If} $OpenAfterInstall == 1
+    Exec '"$INSTDIR\${APP_EXE}"'
+  ${EndIf}
+
+  ${If} $SupportDeveloper == 1
+    ExecShell "open" "${DONATE_URL}"
   ${EndIf}
 FunctionEnd

@@ -99,8 +99,9 @@ public partial class App : Application
 
         var mainWindow = new MainWindow();
         desktop.MainWindow = mainWindow;
+        TrayService.Initialize(desktop);
         mainWindow.Show();
-        desktop.ShutdownMode = ShutdownMode.OnMainWindowClose;
+        desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
     }
 
     private static Task WaitForCloseAsync(Window dialog)

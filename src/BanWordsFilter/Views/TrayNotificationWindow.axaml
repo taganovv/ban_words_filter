@@ -1,0 +1,47 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="BanWordsFilter.Views.TrayNotificationWindow"
+        Width="360"
+        SizeToContent="Height"
+        CanResize="False"
+        ShowInTaskbar="False"
+        Topmost="True"
+        Focusable="False"
+        WindowStartupLocation="Manual"
+        TransparencyLevelHint="Transparent"
+        Background="Transparent"
+        SystemDecorations="None">
+
+  <Border Background="{StaticResource PanelBrush}"
+          BorderBrush="{StaticResource BorderBrush}"
+          BorderThickness="1"
+          CornerRadius="12"
+          Padding="16,14"
+          BoxShadow="0 8 24 0 #66000000">
+    <Grid ColumnDefinitions="Auto,*,Auto">
+      <Image Grid.Column="0"
+             Source="/Assets/app-icon.png"
+             Width="36"
+             Height="36"
+             VerticalAlignment="Center" />
+      <StackPanel Grid.Column="1"
+                  Margin="14,0,10,0"
+                  VerticalAlignment="Center"
+                  Spacing="4">
+        <TextBlock Text="Ban Words Filter"
+                   FontSize="15"
+                   FontWeight="Bold" />
+        <TextBlock Classes="muted"
+                   FontSize="13"
+                   TextWrapping="Wrap"
+                   Text="Программа работает в трее. Фильтр продолжает работу." />
+      </StackPanel>
+      <Button Grid.Column="2"
+              Classes="toast-close"
+              Content="✕"
+              VerticalAlignment="Top"
+              Click="OnCloseClick"
+              ToolTip.Tip="Закрыть" />
+    </Grid>
+  </Border>
+</Window>

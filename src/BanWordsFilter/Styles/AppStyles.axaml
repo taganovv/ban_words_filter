@@ -104,6 +104,13 @@
     <Setter Property="FontWeight" Value="SemiBold" />
   </Style>
 
+  <Style Selector="Button.header-action">
+    <Setter Property="MinWidth" Value="132" />
+    <Setter Property="MinHeight" Value="40" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+  </Style>
+
   <Style Selector="ProgressBar.thin">
     <Setter Property="Height" Value="4" />
     <Setter Property="MinHeight" Value="4" />
@@ -276,6 +283,32 @@
     <Setter Property="BorderBrush" Value="{StaticResource GreenBrush}" />
   </Style>
 
+  <Style Selector="Button.toast-close">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Foreground" Value="{StaticResource MutedBrush}" />
+    <Setter Property="Padding" Value="4,2" />
+    <Setter Property="MinWidth" Value="28" />
+    <Setter Property="MinHeight" Value="28" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="CornerRadius" Value="6" />
+  </Style>
+
+  <Style Selector="Button.toast-close:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#303035" />
+    <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+  </Style>
+
+  <Style Selector="ScrollViewer.gutter">
+    <Setter Property="Padding" Value="0,0,14,0" />
+  </Style>
+
+  <Style Selector="StackPanel.scroll-gutter,
+                 ItemsControl.scroll-gutter,
+                 TextBlock.scroll-gutter">
+    <Setter Property="Margin" Value="0,0,18,0" />
+  </Style>
+
   <Style Selector="TextBox.log, TextBox.result">
     <Setter Property="Background" Value="{StaticResource InputBrush}" />
     <Setter Property="AcceptsReturn" Value="True" />
@@ -284,5 +317,6 @@
     <Setter Property="FontFamily" Value="Consolas, SF Mono, Menlo, monospace" />
     <Setter Property="FontSize" Value="12" />
     <Setter Property="Height" Value="360" />
+    <Setter Property="Padding" Value="10,8,28,8" />
   </Style>
 </Styles>

@@ -1,6 +1,8 @@
 using System;
 using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Interactivity;
 using BanWordsFilter.Services;
 using BanWordsFilter.ViewModels;
@@ -12,6 +14,7 @@ public partial class MainWindow : Window
 {
     private readonly BotLifecycleService _services = new();
     private readonly MainViewModel _viewModel;
+    private bool _forceClose;
 
     public MainWindow()
     {
@@ -23,7 +26,23 @@ public partial class MainWindow : Window
         DataContext = _viewModel;
         InitializeComponent();
         Loaded += OnLoaded;
+        Closing += OnClosing;
         Closed += OnClosed;
+    }
+
+    public void ShowFromTray()
+    {
+        ShowInTaskbar = true;
+        Show();
+        Activate();
+        if (WindowState == WindowState.Minimized)
+            WindowState = WindowState.Normal;
+    }
+
+    public void ForceClose()
+    {
+        _forceClose = true;
+        Close();
     }
 
     private void ShowInstructions()
@@ -50,6 +69,19 @@ public partial class MainWindow : Window
         return await dialog.ShowDialog<bool>(this);
     }
 
+    private async void OnExitClick(object? sender, RoutedEventArgs e)
+    {
+        var dialog = new ConfirmExitDialog { WindowStartupLocation = WindowStartupLocation.CenterOwner };
+        if (!await dialog.ShowDialog<bool>(this))
+            return;
+
+        if (_viewModel.IsRunning)
+            await _viewModel.StopBotAsync();
+
+        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            TrayService.ExitApplication(desktop);
+    }
+
     private async void OnLoaded(object? sender, RoutedEventArgs e)
     {
         try
@@ -60,6 +92,17 @@ public partial class MainWindow : Window
         {
             _viewModel.ShowStartupError(ex.Message);
         }
+    }
+
+    private void OnClosing(object? sender, WindowClosingEventArgs e)
+    {
+        if (_forceClose)
+            return;
+
+        e.Cancel = true;
+        Hide();
+        ShowInTaskbar = false;
+        TrayNotificationService.ShowMinimizedToTray(this);
     }
 
     private void OnClosed(object? sender, EventArgs e)
