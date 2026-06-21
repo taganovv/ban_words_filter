@@ -104,33 +104,16 @@ public sealed class TwitchBotService : IDisposable
                 return;
             }
 
-            if (match.Action == "timeout_or_ban" && _settings.TimeoutSecondsOrDefault() > 0)
-            {
-                await _api.Helix.Moderation.BanUserAsync(
-                    _broadcasterId,
-                    _settings.TwitchBotId,
-                    new BanUserRequest
-                    {
-                        UserId = userId,
-                        Reason = reason,
-                        Duration = _settings.TimeoutSecondsOrDefault(),
-                    });
-                RecordBan(message.Username, userId, reason, match, "timeout");
-                _log($"TIMEOUT {_settings.TimeoutSecondsOrDefault()}s: {message.Username} | matched: {match.Pattern}");
-            }
-            else
-            {
-                await _api.Helix.Moderation.BanUserAsync(
-                    _broadcasterId,
-                    _settings.TwitchBotId,
-                    new BanUserRequest
-                    {
-                        UserId = userId,
-                        Reason = reason,
-                    });
-                RecordBan(message.Username, userId, reason, match, "ban");
-                _log($"BAN: {message.Username} | matched: {match.Pattern}");
-            }
+            await _api.Helix.Moderation.BanUserAsync(
+                _broadcasterId,
+                _settings.TwitchBotId,
+                new BanUserRequest
+                {
+                    UserId = userId,
+                    Reason = reason,
+                });
+            RecordBan(message.Username, userId, reason, match, "ban");
+            _log($"BAN: {message.Username} | matched: {match.Pattern}");
         }
         catch (Exception ex)
         {

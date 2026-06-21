@@ -38,7 +38,7 @@
     <Setter Property="Padding" Value="20" />
   </Style>
 
-  <Style Selector="TextBox, ComboBox">
+  <Style Selector="TextBox">
     <Setter Property="Background" Value="{StaticResource InputBrush}" />
     <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
     <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
@@ -318,5 +318,57 @@
     <Setter Property="FontSize" Value="12" />
     <Setter Property="Height" Value="360" />
     <Setter Property="Padding" Value="10,8,28,8" />
+  </Style>
+
+  <Style Selector="Border.instruction-intro">
+    <Setter Property="Background" Value="#1F1F23" />
+    <Setter Property="BorderBrush" Value="{StaticResource PurpleBrush}" />
+    <Setter Property="BorderThickness" Value="3,1,1,1" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="Padding" Value="14,12" />
+    <Setter Property="Margin" Value="0,0,0,14" />
+  </Style>
+
+  <Style Selector="Border.instruction-step">
+    <Setter Property="Background" Value="{StaticResource PanelBrush}" />
+    <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="Padding" Value="14" />
+    <Setter Property="Margin" Value="0,0,0,10" />
+  </Style>
+
+  <Style Selector="Border.instruction-badge">
+    <Setter Property="Width" Value="28" />
+    <Setter Property="Height" Value="28" />
+    <Setter Property="CornerRadius" Value="14" />
+    <Setter Property="Background" Value="{StaticResource PurpleBrush}" />
+  </Style>
+
+  <Style Selector="Border.instruction-callout-warn">
+    <Setter Property="Background" Value="#221A33" />
+    <Setter Property="BorderBrush" Value="{StaticResource PurpleBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="Padding" Value="12" />
+    <Setter Property="Margin" Value="0,10,0,0" />
+  </Style>
+
+  <Style Selector="Border.instruction-callout-ok">
+    <Setter Property="Background" Value="#102820" />
+    <Setter Property="BorderBrush" Value="{StaticResource GreenBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="Padding" Value="12" />
+    <Setter Property="Margin" Value="0,10,0,0" />
+  </Style>
+
+  <Style Selector="Border.instruction-callout-info">
+    <Setter Property="Background" Value="#1F1F23" />
+    <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="Padding" Value="14" />
+    <Setter Property="Margin" Value="0,4,0,0" />
   </Style>
 </Styles>

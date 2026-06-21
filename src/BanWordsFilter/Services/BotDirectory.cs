@@ -13,6 +13,4 @@ public static class BotDirectory
         Directory.CreateDirectory(dir);
         return dir;
     }
-
-    public static string StartupLogPath() => Path.Combine(DataDirectory(), "startup.log");
 }

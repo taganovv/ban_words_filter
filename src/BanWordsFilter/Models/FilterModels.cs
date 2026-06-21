@@ -15,7 +15,6 @@ public sealed class FilterResult
 {
     public bool Banned { get; init; }
     public string? Action { get; init; }
-    public string? Severity { get; init; }
     public FilterMatch? TopMatch { get; init; }
     public IReadOnlyList<FilterMatch> Matches { get; init; } = [];
 }
@@ -38,8 +37,4 @@ public sealed class BotSettings
     public string TwitchBotName { get; set; } = "";
     public string TwitchBotId { get; set; } = "";
     public string TwitchChannel { get; set; } = "";
-    public string TimeoutSeconds { get; set; } = "0";
-
-    public int TimeoutSecondsOrDefault()
-        => int.TryParse(TimeoutSeconds, out var value) ? Math.Max(0, value) : 0;
 }

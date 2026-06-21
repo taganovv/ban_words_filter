@@ -7,7 +7,7 @@
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <AssemblyName>BanWordsFilter</AssemblyName>
     <Product>Ban Words Filter</Product>
-    <Version>4.0.1</Version>
+    <Version>4.1.1</Version>
     <ApplicationIcon>Assets\app-icon.ico</ApplicationIcon>
   </PropertyGroup>
 
@@ -29,7 +29,6 @@
     <AvaloniaResource Include="Assets\app-icon.png" />
     <AvaloniaResource Include="Assets\coin-icon.png" />
     <AvaloniaResource Include="Assets\twitch-icon.png" />
-    <EmbeddedResource Include="Resources\SetupInstructions.txt" />
     <EmbeddedResource Include="Resources\banned-words.json" />
   </ItemGroup>
 </Project>

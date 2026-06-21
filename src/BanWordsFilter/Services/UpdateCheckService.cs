@@ -38,7 +38,6 @@ public sealed class UpdateCheckService
             Requirement = requirement,
             CurrentVersion = CurrentVersion,
             LatestVersion = latest.Version,
-            ReleasePageUrl = latest.ReleasePageUrl,
             InstallerDownloadUrl = latest.InstallerDownloadUrl
         };
     }
@@ -74,13 +73,9 @@ public sealed class UpdateCheckService
             if (!TryParseVersion(tagName, out var version))
                 continue;
 
-            var releasePageUrl = releaseElement.TryGetProperty("html_url", out var htmlUrlElement)
-                ? htmlUrlElement.GetString()
-                : null;
-
             var installerDownloadUrl = FindInstallerDownloadUrl(releaseElement);
 
-            releases.Add(new ReleaseInfo(version, releasePageUrl, installerDownloadUrl));
+            releases.Add(new ReleaseInfo(version, installerDownloadUrl));
         }
 
         releases.Sort((a, b) => b.Version.CompareTo(a.Version));
@@ -131,5 +126,5 @@ public sealed class UpdateCheckService
         return client;
     }
 
-    private sealed record ReleaseInfo(Version Version, string? ReleasePageUrl, string? InstallerDownloadUrl);
+    private sealed record ReleaseInfo(Version Version, string? InstallerDownloadUrl);
 }

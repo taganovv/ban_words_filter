@@ -79,7 +79,6 @@ public sealed class MessageFilterService
         {
             Banned = shouldBan,
             Action = top.Action,
-            Severity = top.Severity,
             TopMatch = top,
             Matches = matches,
         };

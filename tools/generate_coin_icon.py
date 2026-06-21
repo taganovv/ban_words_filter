@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-"""Generate a gold coin PNG for the donate button."""
-
 from __future__ import annotations
 
 import math

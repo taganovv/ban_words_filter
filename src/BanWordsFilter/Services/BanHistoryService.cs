@@ -42,9 +42,6 @@ public sealed class BanHistoryService
         return true;
     }
 
-    public BanRecord? GetById(string id)
-        => LoadAll().FirstOrDefault(record => record.Id == id);
-
     public void Clear()
     {
         try { File.Delete(HistoryPath); } catch { }

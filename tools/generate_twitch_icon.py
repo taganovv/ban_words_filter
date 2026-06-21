@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-"""Generate a Twitch logo PNG for the resource button."""
-
 from __future__ import annotations
 
 import sys

@@ -10,15 +10,7 @@ namespace BanWordsFilter.Services;
 
 public sealed class SettingsService
 {
-    public static readonly IReadOnlyList<string> FieldKeys =
-    [
-        "TWITCH_TOKEN",
-        "TWITCH_CLIENT_ID",
-        "TWITCH_CLIENT_SECRET",
-        "TWITCH_BOT_NAME",
-        "TWITCH_BOT_ID",
-        "TWITCH_CHANNEL",
-    ];
+    public static readonly IReadOnlyList<string> FieldKeys = AppSettings.Fields;
 
     private static string ConfigPath => Path.Combine(BotDirectory.DataDirectory(), "config.json");
 
@@ -50,7 +42,6 @@ public sealed class SettingsService
         settings.TwitchToken = FormatOAuthToken(settings.TwitchToken);
         settings.TwitchBotName = settings.TwitchBotName.Trim().ToLowerInvariant();
         settings.TwitchChannel = settings.TwitchChannel.Trim().TrimStart('#').ToLowerInvariant();
-        settings.TimeoutSeconds = "0";
 
         Directory.CreateDirectory(BotDirectory.DataDirectory());
         var data = ToDictionary(settings);
@@ -78,15 +69,9 @@ public sealed class SettingsService
     public void ClearUserData()
     {
         var dataDir = BotDirectory.DataDirectory();
-        foreach (var file in new[] { "config.json", "user-word-lists.json", "ban-history.json", "startup.log", "install.log", ".deps_ok" })
+        foreach (var file in new[] { "config.json", "user-word-lists.json", "ban-history.json" })
         {
             try { File.Delete(Path.Combine(dataDir, file)); } catch { }
-        }
-
-        var venv = Path.Combine(dataDir, ".venv");
-        if (Directory.Exists(venv))
-        {
-            try { Directory.Delete(venv, true); } catch { }
         }
     }
 
@@ -121,7 +106,6 @@ public sealed class SettingsService
             TwitchBotName = values.GetValueOrDefault("TWITCH_BOT_NAME", ""),
             TwitchBotId = values.GetValueOrDefault("TWITCH_BOT_ID", ""),
             TwitchChannel = values.GetValueOrDefault("TWITCH_CHANNEL", ""),
-            TimeoutSeconds = "0",
         };
 
     public static Dictionary<string, string> ToDictionary(BotSettings settings)
